@@ -1,0 +1,40 @@
+{
+  "name": "bunchbox-sdk",
+  "version": "0.1.0",
+  "description": "The JavaScript SDK for Bunchbox.",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "ava",
+    "lint": "node_modules/.bin/eslint --fix --ext .js lib",
+    "docs": "node_modules/.bin/documentation serve --watch lib/index.js -f md"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.c.peaksandpies.io:bunchbox/bunchbox-sdk.git"
+  },
+  "homepage": "https://bunchbox.co",
+  "author": "Peaks & Pies GmbH",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "ava": "1.0.0-beta.5.1",
+    "documentation": "^8.0.0",
+    "eslint": "^4.19.1",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-ava": "^4.5.1",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-prettier": "^2.6.0",
+    "prettier": "1.13.4"
+  },
+  "engines": {
+    "node": ">=8.0.0",
+    "npm": ">=5.2.0"
+  },
+  "files": [
+    "lib/",
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "package.json"
+  ]
+}
