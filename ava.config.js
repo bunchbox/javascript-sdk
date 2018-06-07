@@ -1,13 +1,12 @@
 export default {
-  ava: {
-    files: ['lib/**/*.js'],
-    sources: ['**/*.{js,jsx}'],
-    cache: true,
-    concurrency: 4,
-    failFast: false,
-    failWithoutAssertions: true,
-    tap: true,
-    compileEnhancements: false,
-    require: []
-  }
+  files: ['test/**/*.js'],
+  sources: ['lib/**/*.js'],
+  cache: true,
+  concurrency: 4,
+  failFast: false,
+  failWithoutAssertions: true,
+  tap: true,
+  compileEnhancements: false,
+  require: ['ava-playback'],
+  playbacks: 'test/fixtures'
 }

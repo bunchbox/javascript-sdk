@@ -4,9 +4,9 @@
   "description": "The JavaScript SDK for Bunchbox.",
   "main": "lib/index.js",
   "scripts": {
-    "test": "ava",
-    "lint": "node_modules/.bin/eslint --fix --ext .js lib",
-    "docs": "node_modules/.bin/documentation serve --watch lib/index.js -f md"
+    "test": "ava --verbose",
+    "lint": "eslint --fix --ext .js lib",
+    "docs": "documentation serve --watch lib/index.js -f md"
   },
   "repository": {
     "type": "git",
@@ -18,6 +18,7 @@
   "private": true,
   "devDependencies": {
     "ava": "1.0.0-beta.5.1",
+    "ava-playback": "0.0.14",
     "documentation": "^8.0.0",
     "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
@@ -36,5 +37,8 @@
     "LICENSE",
     "README.md",
     "package.json"
-  ]
+  ],
+  "dependencies": {
+    "axios": "^0.18.0"
+  }
 }
