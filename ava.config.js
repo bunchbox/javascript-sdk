@@ -1,5 +1,5 @@
 export default {
-  files: ['test/**/*.js'],
+  files: ['test/**/*.js', '!test/tapes/*.js'],
   sources: ['lib/**/*.js'],
   cache: true,
   concurrency: 4,
