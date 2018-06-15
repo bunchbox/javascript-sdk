@@ -5,6 +5,12 @@ const testServer = require('../_test_server')
 
 const PORT = 5999
 
+// In order to make each test unique, the test name (=title) is used as part of
+// the host.
+const baseUrl = ({ title }) => {
+  return `http://${title.replace(new RegExp(' ', 'g'), '_')}.localhost:${PORT}`
+}
+
 test.before(() => {
   testServer.start('https://api.bunchbox.co', PORT)
 })
@@ -12,10 +18,6 @@ test.before(() => {
 test.after(() => {
   testServer.stop()
 })
-
-const baseUrl = ({ title }) => {
-  return `http://${title.replace(new RegExp(' ', 'g'), '_')}.localhost:${PORT}`
-}
 
 test('fetches the testing file', async t => {
   const testingFile = await api.fetchTestingFile(process.env.TOKEN, {

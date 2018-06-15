@@ -6,7 +6,5 @@ export default {
   failFast: false,
   failWithoutAssertions: true,
   tap: true,
-  compileEnhancements: false,
-  require: ['ava-playback'],
-  playbacks: 'test/fixtures'
+  compileEnhancements: true
 }
