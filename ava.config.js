@@ -6,5 +6,6 @@ export default {
   failFast: false,
   failWithoutAssertions: true,
   tap: true,
-  compileEnhancements: true
+  compileEnhancements: true,
+  require: ['rootpath']
 }

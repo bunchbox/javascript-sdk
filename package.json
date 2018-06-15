@@ -39,6 +39,7 @@
     "package.json"
   ],
   "dependencies": {
-    "axios": "^0.18.0"
+    "axios": "^0.18.0",
+    "rootpath": "^0.1.2"
   }
 }

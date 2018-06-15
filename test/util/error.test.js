@@ -1,6 +1,8 @@
+require('rootpath')()
+
 const test = require('ava')
 
-const { BunchboxError } = require('../../lib/util/error.js')
+const { BunchboxError } = require('lib/util/error.js')
 
 test('has custom name', t => {
   const error = new BunchboxError(t.title)
