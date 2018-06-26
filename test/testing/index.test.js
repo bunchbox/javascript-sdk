@@ -9,15 +9,15 @@ const {
   VariantBuilder
 } = require('test/_fixtures')
 
-function log() {
-  const { inspect } = require('util')
+// function log() {
+//   const { inspect } = require('util')
 
-  const args = Array.from(arguments).map(arg =>
-    inspect(arg, { colors: true, depth: null })
-  )
+//   const args = Array.from(arguments).map(arg =>
+//     inspect(arg, { colors: true, depth: null })
+//   )
 
-  console.log.apply(console, args)
-}
+//   console.log.apply(console, args)
+// }
 
 test('throws if no userId is passed', t => {
   const experiment = new ExperimentBuilder().build()

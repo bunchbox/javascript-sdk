@@ -34,10 +34,10 @@ test('fetches the testing file', async t => {
 })
 
 test('throws error if the token does not exist', async t => {
-  const error = await t.throws(() =>
-    api.fetchTestingFile('0000000', { baseUrl: baseUrl(t) })
+  const error = await t.throws(
+    () => api.fetchTestingFile('0000000', { baseUrl: baseUrl(t) }),
+    Error
   )
 
   t.is(error.message, 'Request failed with status code 403')
-  t.is(error.name, 'BunchboxError')
 })
