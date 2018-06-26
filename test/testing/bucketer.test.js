@@ -2,7 +2,7 @@ require('rootpath')()
 
 const test = require('ava')
 
-const bucketer = require('lib/bucketer')
+const bucketer = require('lib/testing/bucketer')
 
 test('chooses the only available variant', t => {
   const experiment = {
