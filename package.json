@@ -4,7 +4,7 @@
   "description": "The JavaScript SDK for Bunchbox.",
   "main": "lib/index.js",
   "scripts": {
-    "test": "ava --verbose",
+    "test": "ava",
     "lint": "eslint --fix --ext .js lib",
     "docs": "documentation serve --watch lib/index.js -f md"
   },

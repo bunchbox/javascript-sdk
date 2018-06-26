@@ -38,12 +38,16 @@ class StepBuilder extends BaseBuilder {
   constructor() {
     super()
 
-    this.entry = true
     this.id = 's0'
     this.tokens = []
     this.variants = [new VariantBuilder().build()]
 
     super.init()
+  }
+
+  withUrlTargeting(url) {
+    const rule = RuleBuilder.createUrlRule(url)
+    return this.withTokens([{ type: 1, rule }])
   }
 }
 class TokenBuilder extends BaseBuilder {
@@ -115,7 +119,6 @@ class ExperimentBuilder extends BaseBuilder {
 
   withUrlTargeting(url) {
     const rule = RuleBuilder.createUrlRule(url)
-
     return this.withTargeting([{ type: 1, rule }])
   }
 }
