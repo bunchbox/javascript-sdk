@@ -115,11 +115,13 @@ test('should evaluate string comparators', t => {
 
 test('evaluates device attributes', t => {
   const params = {
-    os: 'Windows',
-    browser: 'Chrome',
-    category: 'd',
-    viewportHeight: 100,
-    viewportWidth: 100
+    device: {
+      os: 'Windows',
+      browser: 'Chrome',
+      category: 'd',
+      viewportHeight: 100,
+      viewportWidth: 100
+    }
   }
 
   const matching_conditions = [
@@ -150,7 +152,7 @@ test('evaluates device attributes', t => {
 test('evaluates parameter attributes', t => {
   const params = {
     urlParameters: { foo: 'bar', bar: null },
-    refParameters: { bar: 'foo', foo: null }
+    referrerParameters: { bar: 'foo', foo: null }
   }
 
   const matching_conditions = [
@@ -174,10 +176,12 @@ test('evaluates parameter attributes', t => {
 
 test('evaluates geo attributes', t => {
   const params = {
-    ip: '42.42.42.42',
-    country: 'Mali',
-    countryCode: 'ML',
-    city: 'Timbuktu'
+    geo: {
+      ip: '42.42.42.42',
+      country: 'Mali',
+      countryCode: 'ML',
+      city: 'Timbuktu'
+    }
   }
 
   const matching_conditions = [

@@ -6,18 +6,10 @@ const testing = require('lib/testing')
 const {
   ExperimentBuilder,
   StepBuilder,
-  VariantBuilder
+  RuleBuilder,
+  VariantBuilder,
+  TokenBuilder
 } = require('test/_fixtures')
-
-// function log() {
-//   const { inspect } = require('util')
-
-//   const args = Array.from(arguments).map(arg =>
-//     inspect(arg, { colors: true, depth: null })
-//   )
-
-//   console.log.apply(console, args)
-// }
 
 test('throws if no userId is passed', t => {
   const experiment = new ExperimentBuilder().build()
@@ -50,7 +42,7 @@ test('throwsif the experiment targeting does not match', t => {
     .build()
 
   const error = t.throws(() => {
-    testing.assignUser(experiment, 0, '$userId', { url: null })
+    testing.assignUser(experiment, 0, '$userId', { url: 'foobar.com' })
   }, Error)
 
   t.is(error.message, 'Experiment targeting did not match')
@@ -84,11 +76,8 @@ test('picks step accordingly to the given stepIndex even though the step targeti
   const experiment = new ExperimentBuilder()
     .withUrlTargeting('https://example.com')
     .withSteps([
-      new StepBuilder()
-        .withId('s0')
-        .withUrlTargeting('https://example.com')
-        .withVariants([new VariantBuilder().withId('v00').build()])
-        .build(),
+      new StepBuilder().withId('s0').withUrlTargeting('https://example.com') ||
+        ''.withVariants([new VariantBuilder().withId('v00').build()]).build(),
       new StepBuilder()
         .withId('s1')
         .withUrlTargeting('https://different.com')
@@ -205,4 +194,57 @@ test('throws if no step exits at the given stepIndex', t => {
   const error = t.throws(() => testing.assignUser(experiment, 2, '$userId'))
 
   t.is(error.message, 'Step at index 2 does not exist')
+})
+
+// Test t.throws if params are missing
+
+test('throws if the experiment targeting cannot match due to missing parameters', t => {
+  const experiment = new ExperimentBuilder()
+    .withTargetingRule(RuleBuilder.createGeoRule('city', 'Berlin'))
+    .withTargetingToken(TokenBuilder.createAnd())
+    .withTargetingRule(RuleBuilder.createDeviceRule('category', 'm'))
+    .withTargetingToken(TokenBuilder.createAnd())
+    .withTargetingRule(RuleBuilder.createUrlRule('example.com'))
+    .withSteps([new StepBuilder().build()])
+    .build()
+
+  const error = t.throws(() => testing.assignUser(experiment, null, '$userId'))
+
+  t.is(
+    error.message,
+    'Targeting cannot matchbecause the following params are missing: geo.city, device.category, url'
+  )
+})
+
+test('throws if the step targeting cannot match due to missing parameters', t => {
+  const experiment = new ExperimentBuilder()
+    .withTargetingRule(RuleBuilder.createUrlRule('example.com'))
+    .withSteps([
+      new StepBuilder()
+        .withId('s0')
+        .withTargetingRule(RuleBuilder.createGeoRule('city', 'Berlin'))
+        .withTargetingToken(TokenBuilder.createAnd())
+        .withTargetingRule(RuleBuilder.createDeviceRule('category', 'm'))
+        .withVariants([new VariantBuilder().withId('v00').build()])
+        .build(),
+      new StepBuilder()
+        .withId('s1')
+        .withTargetingRule(RuleBuilder.createGeoRule('city', 'Hamburg'))
+        .withTargetingToken(TokenBuilder.createAnd())
+        .withTargetingRule(RuleBuilder.createDeviceRule('viewportHeight', 640))
+        .withTargetingToken(TokenBuilder.createAnd())
+        .withTargetingRule(RuleBuilder.createUrlRule('example.com/page-one'))
+        .withVariants([new VariantBuilder().withId('v10').build()])
+        .build()
+    ])
+    .build()
+
+  const error = t.throws(() =>
+    testing.assignUser(experiment, null, '$userId', { url: 'example.com' })
+  )
+
+  t.is(
+    error.message,
+    'Targeting cannot matchbecause the following params are missing: geo.city, device.category'
+  )
 })

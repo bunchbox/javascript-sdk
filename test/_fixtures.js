@@ -49,6 +49,14 @@ class StepBuilder extends BaseBuilder {
     const rule = RuleBuilder.createUrlRule(url)
     return this.withTokens([{ type: 1, rule }])
   }
+
+  withTargetingToken(token) {
+    return this.withTokens(this.tokens.concat([token]))
+  }
+
+  withTargetingRule(rule) {
+    return this.withTokens(this.tokens.concat([{ type: 1, rule }]))
+  }
 }
 class TokenBuilder extends BaseBuilder {
   constructor() {
@@ -58,6 +66,18 @@ class TokenBuilder extends BaseBuilder {
     this.rule = new RuleBuilder().build()
 
     super.init()
+  }
+
+  static createAnd() {
+    this.type = 8
+    delete this.rule
+    return this
+  }
+
+  static createOr() {
+    this.type = 16
+    delete this.rule
+    return this
   }
 }
 class RuleBuilder extends BaseBuilder {
@@ -74,6 +94,26 @@ class RuleBuilder extends BaseBuilder {
   withCondition(condition) {
     this.conditions.push(condition)
     return this
+  }
+
+  static createGeoRule(type, val) {
+    const condition = new ConditionBuilder()
+      .withKey(`geo.${type}`)
+      .withComparator('equals')
+      .withValue(val)
+      .build()
+
+    return new RuleBuilder().withCondition(condition).build()
+  }
+
+  static createDeviceRule(type, val) {
+    const condition = new ConditionBuilder()
+      .withKey(`device.${type}`)
+      .withComparator('equals')
+      .withValue(val)
+      .build()
+
+    return new RuleBuilder().withCondition(condition).build()
   }
 
   static createUrlRule(url) {
@@ -121,6 +161,14 @@ class ExperimentBuilder extends BaseBuilder {
     const rule = RuleBuilder.createUrlRule(url)
     return this.withTargeting([{ type: 1, rule }])
   }
+
+  withTargetingToken(token) {
+    return this.withTargeting(this.targeting.concat([token]))
+  }
+
+  withTargetingRule(rule) {
+    return this.withTargeting(this.targeting.concat([{ type: 1, rule }]))
+  }
 }
 
 module.exports = {
@@ -128,5 +176,6 @@ module.exports = {
   StepBuilder,
   VariantBuilder,
   TokenBuilder,
+  RuleBuilder,
   ConditionBuilder
 }
