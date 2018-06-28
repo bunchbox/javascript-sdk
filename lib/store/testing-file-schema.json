@@ -1,0 +1,238 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["account", "version", "revision", "experiments", "rules"],
+  "properties": {
+    "account": { "$ref": "#/definitions/ObjectId" },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "experiments": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/experiment" },
+      "uniqueItems": true
+    },
+    "rules": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/rule" },
+      "uniqueItems": true
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "ObjectId": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{24}$"
+    },
+    "experiment": {
+      "type": "object",
+      "properties": {
+        "id": { "$ref": "#/definitions/ObjectId" },
+        "name": { "type": "string" },
+        "hasCustomVariantDistribution": { "type": "boolean" },
+        "prioritization": { "type": "integer", "enum": [1, 2, 4, 8] },
+        "status": {
+          "type": "string",
+          "enum": [
+            "active",
+            "archived",
+            "ended",
+            "inactive",
+            "paused",
+            "testable"
+          ]
+        },
+        "variantTargetingActive": { "type": "boolean" },
+        "type": {
+          "type": "string",
+          "enum": ["server-side"]
+        },
+        "trafficAllocation": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "targeting": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/token" },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "steps": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/step" },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "goals": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/goal" },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "goals",
+        "hasCustomVariantDistribution",
+        "id",
+        "name",
+        "prioritization",
+        "status",
+        "steps",
+        "targeting",
+        "trafficAllocation",
+        "type",
+        "variantTargetingActive"
+      ],
+      "additionalProperties": false
+    },
+    "rule": {
+      "type": "object",
+      "properties": {
+        "id": { "$ref": "#/definitions/ObjectId" },
+        "match": {
+          "type": "string",
+          "enum": ["any", "all"]
+        },
+        "conditions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/condition" },
+          "minItems": 1,
+          "uniqueItems": false
+        }
+      },
+      "required": ["id", "match", "conditions"],
+      "additionalProperties": false
+    },
+    "condition": {
+      "type": "object",
+      "properties": {
+        "comparator": {
+          "type": "string",
+          "enum": [
+            "regex",
+            "notRegex",
+            "equals",
+            "doesNotEqual",
+            "contains",
+            "doesNotContain",
+            "begins",
+            "doesNotBegin",
+            "ends",
+            "doesNotEnd",
+            "exists",
+            "doesNotExist",
+            "isTrue",
+            "isFalse",
+            "isGreater",
+            "isLess",
+            "isGreaterOrEqual",
+            "isLessOrEqual",
+            "listContains",
+            "listDoesNotContain",
+            "listSizeIsGreater",
+            "listSizeIsLess",
+            "listSizeIsGreaterOrEqual",
+            "listSizeIsLessOrEqual"
+          ]
+        },
+        "value": { "type": "string" },
+        "key": {
+          "type": "string",
+          "enum": [
+            "browserLanguage",
+            "cookie",
+            "device.browser",
+            "device.category",
+            "device.os",
+            "device.viewportHeight",
+            "device.viewportWidth",
+            "geo.city",
+            "geo.country",
+            "geo.countryCode",
+            "geo.ip",
+            "hour",
+            "referrer",
+            "referrerParameters",
+            "url",
+            "urlParameters",
+            "userAgent",
+            "weekday"
+          ]
+        },
+        "attribute": { "$ref": "#/definitions/ObjectId" },
+        "parameter": { "type": "string" }
+      },
+      "required": ["comparator", "key", "value", "attribute"],
+      "additionalProperties": false
+    },
+    "step": {
+      "type": "object",
+      "properties": {
+        "id": { "$ref": "#/definitions/ObjectId" },
+        "tokens": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/token" },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "variants": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/definitions/variant" },
+          "uniqueItems": true
+        }
+      },
+      "required": ["id"],
+      "additionalProperties": false
+    },
+    "goal": {
+      "type": "object",
+      "properties": {
+        "id": { "$ref": "#/definitions/ObjectId" },
+        "identifier": { "type": "string" },
+        "type": { "type": "string", "enum": ["event"] },
+        "active": { "type": "boolean" }
+      },
+      "required": ["id", "identifier", "type", "active"],
+      "additionalProperties": false
+    },
+    "variant": {
+      "type": "object",
+      "properties": {
+        "id": { "$ref": "#/definitions/ObjectId" },
+        "active": { "type": "boolean" },
+        "name": { "type": "string" },
+        "targeting": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/token" },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "type": { "type": "string", "enum": ["original"] },
+        "weight": {
+          "anyOf": [{ "type": "number", "minimum": 0 }, { "type": "null" }]
+        }
+      },
+      "required": ["id", "active", "name", "targeting", "type", "weight"],
+      "additionalProperties": false
+    },
+    "token": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "integer",
+          "enum": [1, 2, 4, 8, 16]
+        },
+        "rule": { "$ref": "#/definitions/ObjectId" }
+      }
+    }
+  }
+}
