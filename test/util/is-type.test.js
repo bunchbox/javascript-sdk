@@ -2,7 +2,6 @@ require('rootpath')()
 
 const test = require('ava')
 const { inspect } = require('util')
-
 const { isNumber, isBoolean, isObject } = require('lib/util/is-type')
 
 test('isBoolean should pass', t => {
