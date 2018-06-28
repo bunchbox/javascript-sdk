@@ -2,17 +2,15 @@ require('rootpath')()
 
 const test = require('ava')
 
-const { hash } = require('lib/util/murmurhash')
+const murmurhash = require('lib/util/murmurhash')
 
-// TODO: rewrite as property tests
-
-test('should return a 32-Bit', t => {
-  t.true(hash('foo') <= Math.pow(2, 32))
+test('hash: returns a 32-Bit', t => {
+  t.true(murmurhash.hash('foo' + Math.random()) <= Math.pow(2, 32))
 })
 
-test('should be seedable', t => {
-  const a = hash('foo', 0)
-  const b = hash('foo', 1)
+test('hash: is seedable', t => {
+  const a = murmurhash.hash('foo', 0)
+  const b = murmurhash.hash('foo', 1)
 
   t.true(a <= Math.pow(2, 32))
   t.true(b <= Math.pow(2, 32))
@@ -20,7 +18,26 @@ test('should be seedable', t => {
   t.not(a, b)
 })
 
-test('should always generate the same result if input is equal', t => {
-  t.is(hash('bar'), hash('bar'))
-  t.not(hash('foo'), hash('bar'))
+test('hash: generates the same result if input is equal', t => {
+  t.is(murmurhash.hash('bar'), murmurhash.hash('bar'))
+  t.not(murmurhash.hash('foo'), murmurhash.hash('bar'))
+})
+
+test('random: returns a float between 0.0 and 1.0', t => {
+  t.true(murmurhash.random('foo' + Math.random()) <= 1.0)
+})
+
+test('random: is seedable', t => {
+  const a = murmurhash.random('foo', 0)
+  const b = murmurhash.random('foo', 1)
+
+  t.true(a <= 1.0)
+  t.true(b <= 1.0)
+
+  t.not(a, b)
+})
+
+test('random: generates the same result if input is equal', t => {
+  t.is(murmurhash.hash('bar'), murmurhash.hash('bar'))
+  t.not(murmurhash.hash('foo'), murmurhash.hash('bar'))
 })
