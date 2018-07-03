@@ -63,7 +63,7 @@
           "type": "array",
           "items": { "$ref": "#/definitions/token" },
           "minItems": 0,
-          "uniqueItems": true
+          "uniqueItems": false
         },
         "steps": {
           "type": "array",
@@ -143,7 +143,9 @@
             "listSizeIsLessOrEqual"
           ]
         },
-        "value": { "type": "string" },
+        "value": {
+          "anyOf": [{ "type": "string" }, { "type": "null" }]
+        },
         "key": {
           "type": "string",
           "enum": [
@@ -168,7 +170,9 @@
           ]
         },
         "attribute": { "$ref": "#/definitions/ObjectId" },
-        "parameter": { "type": "string" }
+        "parameter": {
+          "anyOf": [{ "type": "string" }, { "type": "null" }]
+        }
       },
       "required": ["comparator", "key", "value", "attribute"],
       "additionalProperties": false
@@ -181,7 +185,7 @@
           "type": "array",
           "items": { "$ref": "#/definitions/token" },
           "minItems": 0,
-          "uniqueItems": true
+          "uniqueItems": false
         },
         "variants": {
           "type": "array",
@@ -215,7 +219,7 @@
           "type": "array",
           "items": { "$ref": "#/definitions/token" },
           "minItems": 0,
-          "uniqueItems": true
+          "uniqueItems": false
         },
         "type": { "type": "string", "enum": ["original"] },
         "weight": {

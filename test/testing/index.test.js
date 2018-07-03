@@ -212,7 +212,7 @@ test('throws if the experiment targeting cannot match due to missing parameters'
 
   t.is(
     error.message,
-    'Targeting cannot matchbecause the following params are missing: geo.city, device.category, url'
+    'Targeting cannot match because the following params are missing: geo.city, device.category, url'
   )
 })
 
@@ -245,6 +245,6 @@ test('throws if the step targeting cannot match due to missing parameters', t =>
 
   t.is(
     error.message,
-    'Targeting cannot matchbecause the following params are missing: geo.city, device.category'
+    'Targeting cannot match because the following params are missing: geo.city, device.category'
   )
 })

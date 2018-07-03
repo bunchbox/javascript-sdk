@@ -15,9 +15,14 @@ test('evaluates all tokens', t => {
       rule: {
         match: 'all',
         conditions: [
-          { a: 'foo', k: 'gender', c: 'equals', v: 'female' },
-          { k: 'url', c: 'contains', v: 'http' },
-          { k: 'url', c: 'contains', v: ':' }
+          {
+            attribute: 'foo',
+            key: 'gender',
+            comparator: 'equals',
+            value: 'female'
+          },
+          { key: 'url', comparator: 'contains', value: 'http' },
+          { key: 'url', comparator: 'contains', value: ':' }
         ]
       }
     },
@@ -29,9 +34,14 @@ test('evaluates all tokens', t => {
       rule: {
         match: 'all',
         conditions: [
-          { a: 'foo', k: 'gender', c: 'equals', v: 'female' },
-          { k: 'url', c: 'contains', v: 'http' },
-          { k: 'url', c: 'contains', v: ':' }
+          {
+            attribute: 'foo',
+            key: 'gender',
+            comparator: 'equals',
+            value: 'female'
+          },
+          { key: 'url', comparator: 'contains', value: 'http' },
+          { key: 'url', comparator: 'contains', value: ':' }
         ]
       }
     }
@@ -60,9 +70,14 @@ test('should evaluate all conditions', t => {
   const rule = {
     match: 'all',
     conditions: [
-      { a: 'foo', k: 'gender', c: 'equals', v: 'female' },
-      { k: 'url', c: 'contains', v: 'http' },
-      { k: 'url', c: 'contains', v: ':' }
+      {
+        attribute: 'foo',
+        key: 'gender',
+        comparator: 'equals',
+        value: 'female'
+      },
+      { key: 'url', comparator: 'contains', value: 'http' },
+      { key: 'url', comparator: 'contains', value: ':' }
     ]
   }
 
@@ -78,8 +93,13 @@ test('succeeds if least one condition evaluates to true', t => {
   const rule = {
     match: 'any',
     conditions: [
-      { a: 'foo', k: 'gender', c: 'equals', v: 'female' },
-      { k: 'url', c: 'contains', v: Math.random() }
+      {
+        attribute: 'foo',
+        key: 'gender',
+        comparator: 'equals',
+        value: 'female'
+      },
+      { key: 'url', comparator: 'contains', value: Math.random() }
     ]
   }
 
@@ -90,9 +110,14 @@ test('fails if no condition evaluates to true', t => {
   const rule = {
     match: 'any',
     conditions: [
-      { a: 'foo', k: 'gender', c: 'equals', v: 'female' },
-      { a: 'foo', k: 'gender', c: 'equals', v: 'male' },
-      { a: 'foo', k: 'gender', c: 'equals', v: 'unisex' }
+      {
+        attribute: 'foo',
+        key: 'gender',
+        comparator: 'equals',
+        value: 'female'
+      },
+      { attribute: 'foo', key: 'gender', comparator: 'equals', value: 'male' },
+      { attribute: 'foo', key: 'gender', comparator: 'equals', value: 'unisex' }
     ]
   }
 
@@ -101,16 +126,46 @@ test('fails if no condition evaluates to true', t => {
 
 test('should evaluate string comparators', t => {
   const ua = { userAgent: 'foo' }
-  t.true(evaluator.formula(f({ k: 'userAgent', c: 'begins', v: 'F' }), ua))
-  t.false(evaluator.formula(f({ k: 'userAgent', c: 'begins', v: 'B' }), ua))
+  t.true(
+    evaluator.formula(
+      f({ key: 'userAgent', comparator: 'begins', value: 'F' }),
+      ua
+    )
+  )
+  t.false(
+    evaluator.formula(
+      f({ key: 'userAgent', comparator: 'begins', value: 'B' }),
+      ua
+    )
+  )
 
   const cookie = { cookie: 'foo' }
-  t.true(evaluator.formula(f({ k: 'cookie', c: 'ends', v: 'oo' }), cookie))
-  t.false(evaluator.formula(f({ k: 'cookie', c: 'ends', v: 'f' }), cookie))
+  t.true(
+    evaluator.formula(
+      f({ key: 'cookie', comparator: 'ends', value: 'oo' }),
+      cookie
+    )
+  )
+  t.false(
+    evaluator.formula(
+      f({ key: 'cookie', comparator: 'ends', value: 'f' }),
+      cookie
+    )
+  )
 
   const ref = { referrer: 'bar' }
-  t.true(evaluator.formula(f({ k: 'referrer', c: 'regex', v: /a/ }), ref))
-  t.false(evaluator.formula(f({ k: 'referrer', c: 'regex', v: /^a$/ }), ref))
+  t.true(
+    evaluator.formula(
+      f({ key: 'referrer', comparator: 'regex', value: /a/ }),
+      ref
+    )
+  )
+  t.false(
+    evaluator.formula(
+      f({ key: 'referrer', comparator: 'regex', value: /^a$/ }),
+      ref
+    )
+  )
 })
 
 test('evaluates device attributes', t => {
@@ -125,19 +180,19 @@ test('evaluates device attributes', t => {
   }
 
   const matching_conditions = [
-    { k: 'device.os', c: 'equals', v: 'Windows' },
-    { k: 'device.browser', c: 'contains', v: 'rom' },
-    { k: 'device.category', c: 'regex', v: /d/ },
-    { k: 'device.viewportHeight', c: 'isGreater', v: 99 },
-    { k: 'device.viewportWidth', c: 'isLess', v: 101 }
+    { key: 'device.os', comparator: 'equals', value: 'Windows' },
+    { key: 'device.browser', comparator: 'contains', value: 'rom' },
+    { key: 'device.category', comparator: 'regex', value: /d/ },
+    { key: 'device.viewportHeight', comparator: 'isGreater', value: 99 },
+    { key: 'device.viewportWidth', comparator: 'isLess', value: 101 }
   ]
 
   const failing_conditions = [
-    { k: 'device.os', c: 'equals', v: 'MacOS' },
-    { k: 'device.browser', c: 'contains', v: 'IE' },
-    { k: 'device.category', c: 'regex', v: /m/ },
-    { k: 'device.viewportHeight', c: 'isGreater', v: 100 },
-    { k: 'device.viewportWidth', c: 'isLess', v: 0 }
+    { key: 'device.os', comparator: 'equals', value: 'MacOS' },
+    { key: 'device.browser', comparator: 'contains', value: 'IE' },
+    { key: 'device.category', comparator: 'regex', value: /m/ },
+    { key: 'device.viewportHeight', comparator: 'isGreater', value: 100 },
+    { key: 'device.viewportWidth', comparator: 'isLess', value: 0 }
   ]
 
   for (let condition of matching_conditions) {
@@ -156,13 +211,23 @@ test('evaluates parameter attributes', t => {
   }
 
   const matching_conditions = [
-    { k: 'urlParameters', p: 'foo', c: 'notRegex', v: /barbar/ },
-    { k: 'referrerParameters', p: 'foo', c: 'notRegex', v: /barbar/ },
-    { k: 'referrerParameters', p: 'asdf', c: 'doesNotExist' }
+    {
+      key: 'urlParameters',
+      parameter: 'foo',
+      comparator: 'notRegex',
+      value: /barbar/
+    },
+    {
+      key: 'referrerParameters',
+      parameter: 'foo',
+      comparator: 'notRegex',
+      value: /barbar/
+    },
+    { key: 'referrerParameters', parameter: 'asdf', comparator: 'doesNotExist' }
   ]
 
   const failing_conditions = [
-    { k: 'urlParameters', p: 'bar', c: 'doesNotExist' }
+    { key: 'urlParameters', parameter: 'bar', comparator: 'doesNotExist' }
   ]
 
   for (let condition of matching_conditions) {
@@ -185,13 +250,15 @@ test('evaluates geo attributes', t => {
   }
 
   const matching_conditions = [
-    { k: 'geo.ip', c: 'equals', v: '42.42.42.42' },
-    { k: 'geo.country', c: 'equals', v: 'Mali' },
-    { k: 'geo.countryCode', c: 'equals', v: 'ML' },
-    { k: 'geo.city', c: 'doesNotContain', v: 'Berlin' }
+    { key: 'geo.ip', comparator: 'equals', value: '42.42.42.42' },
+    { key: 'geo.country', comparator: 'equals', value: 'Mali' },
+    { key: 'geo.countryCode', comparator: 'equals', value: 'ML' },
+    { key: 'geo.city', comparator: 'doesNotContain', value: 'Berlin' }
   ]
 
-  const failing_conditions = [{ k: 'geo.ip', c: 'equals', v: '42.42.42.0' }]
+  const failing_conditions = [
+    { key: 'geo.ip', comparator: 'equals', value: '42.42.42.0' }
+  ]
 
   for (let condition of matching_conditions) {
     t.true(evaluator.formula(f(condition), params))
@@ -212,12 +279,14 @@ test('should evaluate custom attributes', t => {
   }
 
   const matching_conditions = [
-    { a: 1, k: 'truthy', c: 'isTrue' },
-    { a: 2, k: 'falsy', c: 'isFalse' },
-    { a: 3, k: 'list', c: 'listContains', v: 3 }
+    { attribute: 1, key: 'truthy', comparator: 'isTrue' },
+    { attribute: 2, key: 'falsy', comparator: 'isFalse' },
+    { attribute: 3, key: 'list', comparator: 'listContains', value: 3 }
   ]
 
-  const failing_conditions = [{ a: 3, k: 'list', c: 'listContains', v: 4 }]
+  const failing_conditions = [
+    { attribute: 3, key: 'list', comparator: 'listContains', value: 4 }
+  ]
 
   for (let condition of matching_conditions) {
     t.true(evaluator.formula(f(condition), params))
@@ -236,27 +305,72 @@ test('only works with arrays', t => {
       number: 1,
       string: 'foo',
       bool: !!1,
-      object: { a: 'b' },
+      object: { attribute: 'b' },
       fn: function() {},
       list: [1, 2, 3, 4]
     }
   }
 
   const matching_conditions = [
-    { a: 'list', k: 'list', c: 'listSizeIsGreater', v: 3 },
-    { a: 'list', k: 'list', c: 'listSizeIsGreaterOrEqual', v: 4 },
-    { a: 'list', k: 'list', c: 'listSizeIsLess', v: 6 },
-    { a: 'list', k: 'list', c: 'listSizeIsLessOrEqual', v: 4 }
+    {
+      attribute: 'list',
+      key: 'list',
+      comparator: 'listSizeIsGreater',
+      value: 3
+    },
+    {
+      attribute: 'list',
+      key: 'list',
+      comparator: 'listSizeIsGreaterOrEqual',
+      value: 4
+    },
+    { attribute: 'list', key: 'list', comparator: 'listSizeIsLess', value: 6 },
+    {
+      attribute: 'list',
+      key: 'list',
+      comparator: 'listSizeIsLessOrEqual',
+      value: 4
+    }
   ]
 
   const failing_conditions = [
-    { a: 'undefined', k: 'undefined', c: 'listSizeIsGreater', v: 5 },
-    { a: 'null', k: 'null', c: 'listSizeIsGreater', v: 5 },
-    { a: 'number', k: 'number', c: 'listSizeIsGreater', v: 5 },
-    { a: 'string', k: 'string', c: 'listSizeIsGreater', v: 5 },
-    { a: 'bool', k: 'bool', c: 'listSizeIsGreater', v: 5 },
-    { a: 'object', k: 'object', c: 'listSizeIsGreater', v: 5 },
-    { a: 'fn', k: 'fn', c: 'listSizeIsGreater', v: 5 }
+    {
+      attribute: 'undefined',
+      key: 'undefined',
+      comparator: 'listSizeIsGreater',
+      value: 5
+    },
+    {
+      attribute: 'null',
+      key: 'null',
+      comparator: 'listSizeIsGreater',
+      value: 5
+    },
+    {
+      attribute: 'number',
+      key: 'number',
+      comparator: 'listSizeIsGreater',
+      value: 5
+    },
+    {
+      attribute: 'string',
+      key: 'string',
+      comparator: 'listSizeIsGreater',
+      value: 5
+    },
+    {
+      attribute: 'bool',
+      key: 'bool',
+      comparator: 'listSizeIsGreater',
+      value: 5
+    },
+    {
+      attribute: 'object',
+      key: 'object',
+      comparator: 'listSizeIsGreater',
+      value: 5
+    },
+    { attribute: 'fn', key: 'fn', comparator: 'listSizeIsGreater', value: 5 }
   ]
 
   for (let condition of matching_conditions) {
@@ -281,7 +395,7 @@ test('fails for non-numeric values', t => {
     1,
     '!!',
     !!1,
-    { a: 'b' },
+    { attribute: 'b' },
     function() {},
     1000000
   ]
@@ -291,7 +405,12 @@ test('fails for non-numeric values', t => {
 
     t[expected](
       evaluator.formula(
-        f({ a: 'list', k: 'list', c: 'listSizeIsLess', v: value }),
+        f({
+          attribute: 'list',
+          key: 'list',
+          comparator: 'listSizeIsLess',
+          value: value
+        }),
         params
       )
     )
@@ -307,7 +426,12 @@ test('succeeds if the list is greater', t => {
 
   t.true(
     evaluator.formula(
-      f({ a: 'list', k: 'list', c: 'listSizeIsGreater', v: 0 }),
+      f({
+        attribute: 'list',
+        key: 'list',
+        comparator: 'listSizeIsGreater',
+        value: 0
+      }),
       params
     )
   )
@@ -322,7 +446,12 @@ test('succeeds the list is greater or equal', t => {
 
   t.true(
     evaluator.formula(
-      f({ a: 'list', k: 'list', c: 'listSizeIsGreaterOrEqual', v: 1 }),
+      f({
+        attribute: 'list',
+        key: 'list',
+        comparator: 'listSizeIsGreaterOrEqual',
+        value: 1
+      }),
       params
     )
   )
@@ -337,7 +466,12 @@ test('succeeds if the list is less', t => {
 
   t.true(
     evaluator.formula(
-      f({ a: 'list', k: 'list', c: 'listSizeIsLess', v: 2 }),
+      f({
+        attribute: 'list',
+        key: 'list',
+        comparator: 'listSizeIsLess',
+        value: 2
+      }),
       params
     )
   )
@@ -352,7 +486,12 @@ test('succeeds if the list is less or equal', t => {
 
   t.true(
     evaluator.formula(
-      f({ a: 'list', k: 'list', c: 'listSizeIsLessOrEqual', v: 1 }),
+      f({
+        attribute: 'list',
+        key: 'list',
+        comparator: 'listSizeIsLessOrEqual',
+        value: 1
+      }),
       params
     )
   )
@@ -363,9 +502,24 @@ test('succeeds if the weekday is equal', t => {
     weekday: 4
   }
 
-  t.true(evaluator.formula(f({ k: 'weekday', c: 'equals', v: '4' }), params))
-  t.false(evaluator.formula(f({ k: 'weekday', c: 'equals', v: 4 }), params)) // TODO make it succeed
-  t.false(evaluator.formula(f({ k: 'weekday', c: 'equals', v: '1' }), params))
+  t.true(
+    evaluator.formula(
+      f({ key: 'weekday', comparator: 'equals', value: '4' }),
+      params
+    )
+  )
+  t.false(
+    evaluator.formula(
+      f({ key: 'weekday', comparator: 'equals', value: 4 }),
+      params
+    )
+  ) // TODO make it succeed
+  t.false(
+    evaluator.formula(
+      f({ key: 'weekday', comparator: 'equals', value: '1' }),
+      params
+    )
+  )
 })
 
 test('succeeds if the hour is greater or equal', t => {
@@ -374,13 +528,22 @@ test('succeeds if the hour is greater or equal', t => {
   }
 
   t.true(
-    evaluator.formula(f({ k: 'hour', c: 'isGreaterOrEqual', v: 14 }), params)
+    evaluator.formula(
+      f({ key: 'hour', comparator: 'isGreaterOrEqual', value: 14 }),
+      params
+    )
   )
   t.true(
-    evaluator.formula(f({ k: 'hour', c: 'isGreaterOrEqual', v: 0 }), params)
+    evaluator.formula(
+      f({ key: 'hour', comparator: 'isGreaterOrEqual', value: 0 }),
+      params
+    )
   )
   t.false(
-    evaluator.formula(f({ k: 'hour', c: 'isGreaterOrEqual', v: 20 }), params)
+    evaluator.formula(
+      f({ key: 'hour', comparator: 'isGreaterOrEqual', value: 20 }),
+      params
+    )
   )
 })
 
@@ -389,9 +552,24 @@ test('succeeds if the hour is less or equal', t => {
     hour: 12
   }
 
-  t.true(evaluator.formula(f({ k: 'hour', c: 'isLessOrEqual', v: 12 }), p))
-  t.true(evaluator.formula(f({ k: 'hour', c: 'isLessOrEqual', v: 23 }), p))
-  t.false(evaluator.formula(f({ k: 'hour', c: 'isLessOrEqual', v: 10 }), p))
+  t.true(
+    evaluator.formula(
+      f({ key: 'hour', comparator: 'isLessOrEqual', value: 12 }),
+      p
+    )
+  )
+  t.true(
+    evaluator.formula(
+      f({ key: 'hour', comparator: 'isLessOrEqual', value: 23 }),
+      p
+    )
+  )
+  t.false(
+    evaluator.formula(
+      f({ key: 'hour', comparator: 'isLessOrEqual', value: 10 }),
+      p
+    )
+  )
 })
 
 test('succeeds if the hour is given as string', t => {
@@ -399,6 +577,16 @@ test('succeeds if the hour is given as string', t => {
     hour: 12
   }
 
-  t.true(evaluator.formula(f({ k: 'hour', c: 'isLessOrEqual', v: 23 }), p))
-  t.true(evaluator.formula(f({ k: 'hour', c: 'isLessOrEqual', v: '23' }), p))
+  t.true(
+    evaluator.formula(
+      f({ key: 'hour', comparator: 'isLessOrEqual', value: 23 }),
+      p
+    )
+  )
+  t.true(
+    evaluator.formula(
+      f({ key: 'hour', comparator: 'isLessOrEqual', value: '23' }),
+      p
+    )
+  )
 })
