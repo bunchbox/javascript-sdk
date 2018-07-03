@@ -1,3 +1,5 @@
+const generateObjectId = require('lib/util/object-id')
+
 class BaseBuilder {
   init() {
     Object.keys(this).forEach(key => {
@@ -23,12 +25,11 @@ class VariantBuilder extends BaseBuilder {
     super()
 
     this.active = true
-    this.event = null
     this.name = 'Variant 0'
-    this.targeting = [new TokenBuilder().build()]
+    this.targeting = []
     this.type = 'original'
     this.weight = null
-    this.id = 'v0'
+    this.id = generateObjectId()
 
     super.init()
   }
@@ -38,16 +39,17 @@ class StepBuilder extends BaseBuilder {
   constructor() {
     super()
 
-    this.id = 's0'
+    this.id = generateObjectId()
     this.tokens = []
     this.variants = [new VariantBuilder().build()]
+    this.entry = true
 
     super.init()
   }
 
   withUrlTargeting(url) {
     const rule = RuleBuilder.createUrlRule(url)
-    return this.withTokens([{ type: 1, rule }])
+    return this.withTokens([new TokenBuilder().withRule(rule).build()])
   }
 
   withTargetingToken(token) {
@@ -55,7 +57,9 @@ class StepBuilder extends BaseBuilder {
   }
 
   withTargetingRule(rule) {
-    return this.withTokens(this.tokens.concat([{ type: 1, rule }]))
+    return this.withTokens(
+      this.tokens.concat([new TokenBuilder().withRule(rule).build()])
+    )
   }
 }
 class TokenBuilder extends BaseBuilder {
@@ -63,21 +67,17 @@ class TokenBuilder extends BaseBuilder {
     super()
 
     this.type = 1
-    this.rule = new RuleBuilder().build()
+    this.rule = null
 
     super.init()
   }
 
   static createAnd() {
-    this.type = 8
-    delete this.rule
-    return this
+    return new TokenBuilder().withType(8).withRule(null)
   }
 
   static createOr() {
-    this.type = 16
-    delete this.rule
-    return this
+    return new TokenBuilder().withType(16).withRule(null)
   }
 }
 class RuleBuilder extends BaseBuilder {
@@ -86,7 +86,7 @@ class RuleBuilder extends BaseBuilder {
 
     this.conditions = []
     this.match = 'any'
-    this.id = 'r0'
+    this.id = generateObjectId()
 
     super.init()
   }
@@ -131,9 +131,22 @@ class ConditionBuilder extends BaseBuilder {
     super()
 
     this.key = null
-    this.attribute = null
+    this.attribute = generateObjectId()
     this.comparator = null
     this.value = null
+
+    super.init()
+  }
+}
+
+class GoalBuilder extends BaseBuilder {
+  constructor() {
+    super()
+
+    this.active = true
+    this.identifier = 'identifier0'
+    this.type = 'event'
+    this.id = generateObjectId()
 
     super.init()
   }
@@ -144,7 +157,7 @@ class ExperimentBuilder extends BaseBuilder {
     super()
 
     this.hasCustomVariantDistribution = false
-    this.id = 'e0'
+    this.id = generateObjectId()
     this.name = 'Server-Side'
     this.prioritization = 4
     this.status = 'active'
@@ -153,13 +166,15 @@ class ExperimentBuilder extends BaseBuilder {
     this.trafficAllocation = 1
     this.type = 'server-side'
     this.variantTargetingActive = false
+    this.goals = []
 
     super.init()
   }
 
   withUrlTargeting(url) {
     const rule = RuleBuilder.createUrlRule(url)
-    return this.withTargeting([{ type: 1, rule }])
+    const token = new TokenBuilder().withRule(rule).build()
+    return this.withTargeting([token])
   }
 
   withTargetingToken(token) {
@@ -167,15 +182,18 @@ class ExperimentBuilder extends BaseBuilder {
   }
 
   withTargetingRule(rule) {
-    return this.withTargeting(this.targeting.concat([{ type: 1, rule }]))
+    return this.withTargeting(
+      this.targeting.concat([new TokenBuilder().withRule(rule).build()])
+    )
   }
 }
 
 module.exports = {
+  ConditionBuilder,
   ExperimentBuilder,
-  StepBuilder,
-  VariantBuilder,
-  TokenBuilder,
+  GoalBuilder,
   RuleBuilder,
-  ConditionBuilder
+  StepBuilder,
+  TokenBuilder,
+  VariantBuilder
 }
