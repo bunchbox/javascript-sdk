@@ -58,7 +58,9 @@ test('throws if an experiment has no steps', t => {
   const error = t.throws(() => validator.validateTestingFile(incomplete))
   t.is(
     error.message,
-    'Validation failed:\n- .experiments[0].steps should NOT have less than 1 items'
+    'Validation failed:\n- Experiment@' +
+      incomplete.experiments[0].id +
+      ': steps should NOT have less than 1 items'
   )
 })
 
@@ -69,7 +71,11 @@ test('throws if an experiment has steps with no variants', t => {
   const error = t.throws(() => validator.validateTestingFile(incomplete))
   t.is(
     error.message,
-    'Validation failed:\n- .experiments[0].steps[0].variants should NOT have less than 1 items'
+    'Validation failed:\n- Experiment@' +
+      incomplete.experiments[0].id +
+      ' | Step@' +
+      incomplete.experiments[0].steps[0].id +
+      ': variants should NOT have less than 1 items'
   )
 })
 
@@ -102,7 +108,6 @@ test('throws if rule(s) is missing', t => {
   incomplete.experiments[0].steps[0].tokens = [t2]
 
   const error = t.throws(() => validator.validateTestingFile(incomplete))
-  console.log(error.message)
   t.is(
     error.message,
     'Validation failed:\n' +
@@ -112,5 +117,20 @@ test('throws if rule(s) is missing', t => {
       '- Rule ' +
       t2.rule +
       ' does not exist'
+  )
+})
+
+test('throws if the testingFile has missing properties', t => {
+  const incomplete = {}
+
+  const error = t.throws(() => validator.validateTestingFile(incomplete))
+  t.is(
+    error.message,
+    'Validation failed:\n' +
+      "- should have required property 'account'\n" +
+      "- should have required property 'version'\n" +
+      "- should have required property 'revision'\n" +
+      "- should have required property 'experiments'\n" +
+      "- should have required property 'rules'"
   )
 })
