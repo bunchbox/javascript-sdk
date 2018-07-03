@@ -248,3 +248,27 @@ test('throws if the step targeting cannot match due to missing parameters', t =>
     'Targeting cannot match because the following params are missing: geo.city, device.category'
   )
 })
+
+test('does not throw if specific url-/referrer-parameters are missing', t => {
+  const experiment = new ExperimentBuilder()
+    .withTargetingRule(RuleBuilder.createUrlParamRule('uKey', 'uValue'))
+    .withTargetingToken(TokenBuilder.createAnd())
+    .withTargetingRule(RuleBuilder.createReferrerParamRule('rKey', 'rValue'))
+    .withSteps([new StepBuilder().build()])
+    .build()
+
+  const e1 = t.throws(() => testing.assignUser(experiment, null, '$userId'))
+  t.is(
+    e1.message,
+    'Targeting cannot match because the following params are missing: urlParameters, referrerParameters'
+  )
+
+  const e2 = t.throws(() =>
+    testing.assignUser(experiment, null, '$userId', {
+      urlParameters: {},
+      referrerParameters: {}
+    })
+  )
+
+  t.is(e2.message, 'Experiment Targeting did not match')
+})

@@ -106,6 +106,28 @@ class RuleBuilder extends BaseBuilder {
     return new RuleBuilder().withCondition(condition).build()
   }
 
+  static createUrlParamRule(param, val) {
+    const condition = new ConditionBuilder()
+      .withKey('urlParameters')
+      .withComparator('equals')
+      .withParameter(param)
+      .withValue(val)
+      .build()
+
+    return new RuleBuilder().withCondition(condition).build()
+  }
+
+  static createReferrerParamRule(param, val) {
+    const condition = new ConditionBuilder()
+      .withKey('referrerParameters')
+      .withComparator('equals')
+      .withParameter(param)
+      .withValue(val)
+      .build()
+
+    return new RuleBuilder().withCondition(condition).build()
+  }
+
   static createDeviceRule(type, val) {
     const condition = new ConditionBuilder()
       .withKey(`device.${type}`)
@@ -133,6 +155,7 @@ class ConditionBuilder extends BaseBuilder {
     this.key = null
     this.attribute = generateObjectId()
     this.comparator = null
+    this.parameter = null
     this.value = null
 
     super.init()
