@@ -147,34 +147,13 @@
           "anyOf": [{ "type": "string" }, { "type": "null" }]
         },
         "key": {
-          "type": "string",
-          "enum": [
-            "browserLanguage",
-            "cookie",
-            "device.browser",
-            "device.category",
-            "device.os",
-            "device.viewportHeight",
-            "device.viewportWidth",
-            "geo.city",
-            "geo.country",
-            "geo.countryCode",
-            "geo.ip",
-            "hour",
-            "referrer",
-            "referrerParameters",
-            "url",
-            "urlParameters",
-            "userAgent",
-            "weekday"
-          ]
+          "type": "string"
         },
-        "attribute": { "$ref": "#/definitions/ObjectId" },
         "parameter": {
           "anyOf": [{ "type": "string" }, { "type": "null" }]
         }
       },
-      "required": ["comparator", "key", "value", "attribute"],
+      "required": ["comparator", "key", "value", "parameter"],
       "additionalProperties": false
     },
     "step": {

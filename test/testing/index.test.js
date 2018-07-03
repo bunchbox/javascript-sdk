@@ -270,5 +270,29 @@ test('does not throw if specific url-/referrer-parameters are missing', t => {
     })
   )
 
-  t.is(e2.message, 'Experiment Targeting did not match')
+  t.is(e2.message, 'Experiment targeting did not match')
+})
+
+test('throws if the step targeting cannot match due to missing attributes', t => {
+  const experiment = new ExperimentBuilder()
+    .withTargetingRule(
+      RuleBuilder.createCustomAttributeRule('gender', 'female')
+    )
+    .withSteps([new StepBuilder().build()])
+    .build()
+
+  for (const params of [
+    undefined,
+    {},
+    { attributes: {} },
+    { attributes: { other: 'foo' } }
+  ]) {
+    const error = t.throws(() =>
+      testing.assignUser(experiment, null, '$userId', params)
+    )
+    t.is(
+      error.message,
+      'Targeting cannot match because the following params are missing: attributes.gender'
+    )
+  }
 })

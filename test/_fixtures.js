@@ -1,4 +1,5 @@
 const generateObjectId = require('lib/util/object-id')
+const { isCustomAttributeKey } = require('lib/testing/evaluator')
 
 class BaseBuilder {
   init() {
@@ -96,6 +97,19 @@ class RuleBuilder extends BaseBuilder {
     return this
   }
 
+  static createCustomAttributeRule(key, val) {
+    if (!isCustomAttributeKey(key))
+      throw Error(`Not a valid cusotm attribute key: ${key} (already taken)`)
+
+    const condition = new ConditionBuilder()
+      .withKey(key)
+      .withComparator('equals')
+      .withValue(val)
+      .build()
+
+    return new RuleBuilder().withCondition(condition).build()
+  }
+
   static createGeoRule(type, val) {
     const condition = new ConditionBuilder()
       .withKey(`geo.${type}`)
@@ -153,7 +167,6 @@ class ConditionBuilder extends BaseBuilder {
     super()
 
     this.key = null
-    this.attribute = generateObjectId()
     this.comparator = null
     this.parameter = null
     this.value = null
