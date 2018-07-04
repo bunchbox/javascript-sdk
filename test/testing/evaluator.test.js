@@ -510,12 +510,13 @@ test('succeeds if the weekday is equal', t => {
       params
     )
   )
-  t.false(
+  t.true(
     evaluator.formula(
       f({ key: 'weekday', comparator: 'equals', value: 4 }),
       params
     )
-  ) // TODO make it succeed
+  )
+
   t.false(
     evaluator.formula(
       f({ key: 'weekday', comparator: 'equals', value: '1' }),
