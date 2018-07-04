@@ -3,6 +3,7 @@ require('rootpath')()
 const test = require('ava')
 
 const testing = require('lib/testing')
+
 const {
   ExperimentBuilder,
   StepBuilder,
@@ -10,6 +11,8 @@ const {
   VariantBuilder,
   TokenBuilder
 } = require('test/_fixtures')
+
+// testing.assignUser/4
 
 test('throws if no userId is passed', t => {
   const experiment = new ExperimentBuilder().build()
@@ -195,8 +198,6 @@ test('throws if no step exits at the given stepIndex', t => {
 
   t.is(error.message, 'Step at index 2 does not exist')
 })
-
-// Test t.throws if params are missing
 
 test('throws if the experiment targeting cannot match due to missing parameters', t => {
   const experiment = new ExperimentBuilder()

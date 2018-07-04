@@ -224,12 +224,79 @@ class ExperimentBuilder extends BaseBuilder {
   }
 }
 
+class TestingFileBuilder extends BaseBuilder {
+  constructor() {
+    super()
+
+    this.account = generateObjectId()
+    this.version = 1
+    this.revision = 1
+    this.experiments = []
+    this.rules = []
+
+    super.init()
+  }
+
+  static createValid() {
+    // Experiment 1: Basic. No Targeting(s). 1 Step. 1 Goal
+
+    const v1 = new VariantBuilder()
+      .withId(generateObjectId())
+      .withTargeting([])
+      .build()
+
+    const s1 = new StepBuilder()
+      .withId(generateObjectId())
+      .withTokens([])
+      .withVariants([v1])
+      .build()
+
+    const g1 = new GoalBuilder().withId(generateObjectId()).build()
+
+    const e1 = new ExperimentBuilder()
+      .withId(generateObjectId())
+      .withSteps([s1])
+      .withGoals([g1])
+      .build()
+
+    // Experiment 2: With Experiment Targeting (Geo). 1 Step. 0 Goals.
+
+    const v2 = new VariantBuilder()
+      .withId(generateObjectId())
+      .withTargeting([])
+      .build()
+
+    const s2 = new StepBuilder()
+      .withId(generateObjectId())
+      .withTokens([])
+      .withVariants([v2])
+      .build()
+
+    const r1 = RuleBuilder.createGeoRule('city', 'Seattle')
+
+    const e2 = new ExperimentBuilder()
+      .withId(generateObjectId())
+      .withTargetingRule(r1.id)
+      .withSteps([s2])
+      .withGoals([])
+      .build()
+
+    // Build
+
+    return new TestingFileBuilder()
+      .withExperiments([e1, e2])
+      .withRules([r1])
+      .build()
+  }
+}
+
 module.exports = {
   ConditionBuilder,
   ExperimentBuilder,
   GoalBuilder,
   RuleBuilder,
   StepBuilder,
+  TestingFileBuilder,
   TokenBuilder,
   VariantBuilder
 }

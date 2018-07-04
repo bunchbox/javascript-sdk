@@ -4,6 +4,8 @@ const test = require('ava')
 const { inspect } = require('util')
 const { isNumber, isBoolean, isObject } = require('lib/util/is-type')
 
+// isBoolean/1
+
 test('isBoolean should pass', t => {
   for (let b of [true, false, new Boolean()]) {
     t.true(isBoolean(b), `${inspect(b)} was not detected as boolean`)
@@ -16,6 +18,8 @@ test('isBoolean should fail', t => {
   }
 })
 
+// isNumber/1
+
 test('isNumber should pass', t => {
   for (let n of [1, 1.2, 1e7, new Number(2)]) {
     t.true(isNumber(n), `${inspect(n)} was not detected as number`)
@@ -27,6 +31,8 @@ test('isNumber should fail', t => {
     t.false(isNumber(n), `${inspect(n)} was detected as number`)
   }
 })
+
+// isObject/1
 
 test('isObject should pass', t => {
   for (let o of [{}, { length: 1 }, new Object()]) {

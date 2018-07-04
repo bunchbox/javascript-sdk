@@ -2,8 +2,9 @@ require('rootpath')()
 
 const test = require('ava')
 
-const testServer = require('test/_test_server')
 const api = require('lib/services/api')
+
+const testServer = require('test/_test_server')
 
 const PORT = 5999
 
@@ -20,6 +21,8 @@ test.before(() => {
 test.after(() => {
   testServer.stop()
 })
+
+// api.fetchTestingFile/2
 
 test('fetches the testing file', async t => {
   const testingFile = await api.fetchTestingFile(process.env.TOKEN, {

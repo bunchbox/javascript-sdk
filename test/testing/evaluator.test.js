@@ -8,6 +8,8 @@ const f = condition => [
   { type: 1, rule: { match: 'any', conditions: [condition] } }
 ]
 
+// evaluator.formula/2
+
 test('evaluates all tokens', t => {
   const tokens = [
     {

@@ -9,6 +9,8 @@ const {
   encodeParams
 } = require('lib/services/collector/encoder')
 
+// encoder.encodeAttributes/1
+
 test('encodes attributes', t => {
   const attributes = {
     number: 42,
@@ -23,6 +25,8 @@ test('encodes attributes', t => {
     at: ['number=+:42', 'boolean=!:1', 'string=s:foo', 'array=a:bar,bar2']
   })
 })
+
+// encoder.encodeEcommerceParams/1
 
 test('encodes ecommerce parameters', t => {
   const params = {
@@ -40,6 +44,8 @@ test('encodes ecommerce parameters', t => {
     cpi: 'cpi'
   })
 })
+
+// encoder.encodeMainParams/1
 
 test('encodes main parameters', t => {
   const params = {
@@ -65,6 +71,8 @@ test('encodes main parameters', t => {
     u: 'u'
   })
 })
+
+// encoder.encodeParams/1
 
 test('encodes a nested object of parameters', t => {
   const params = {

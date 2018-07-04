@@ -2,57 +2,26 @@ require('rootpath')()
 
 const test = require('ava')
 
-const {
-  ExperimentBuilder,
-  ConditionBuilder,
-  StepBuilder,
-  RuleBuilder,
-  VariantBuilder,
-  TokenBuilder,
-  GoalBuilder
-} = require('test/_fixtures')
-
 const generateObjectId = require('lib/util/object-id')
-
 const validator = require('lib/store/validator')
 
-function createValidTestingFile() {
-  const variant = new VariantBuilder()
-    .withId(generateObjectId())
-    .withTargeting([])
-    .build()
+const {
+  RuleBuilder,
+  TokenBuilder,
+  TestingFileBuilder,
+  StepBuilder
+} = require('test/_fixtures')
 
-  const step = new StepBuilder()
-    .withId(generateObjectId())
-    .withTokens([])
-    .withVariants([variant])
-    .build()
-
-  const goal = new GoalBuilder().withId(generateObjectId()).build()
-
-  const experiment = new ExperimentBuilder()
-    .withId(generateObjectId())
-    .withSteps([step])
-    .withGoals([goal])
-    .build()
-
-  return {
-    account: generateObjectId(),
-    version: 1,
-    revision: 1,
-    experiments: [experiment],
-    rules: []
-  }
-}
+// validator.validateTestingFile/1
 
 test('returns true for a perfectly valid testing file', t => {
-  const complete = createValidTestingFile()
+  const complete = TestingFileBuilder.createValid()
 
   t.true(validator.validateTestingFile(complete))
 })
 
 test('throws if an experiment has no steps', t => {
-  const incomplete = Object.assign({}, createValidTestingFile())
+  const incomplete = TestingFileBuilder.createValid()
   incomplete.experiments[0].steps = []
 
   const error = t.throws(() => validator.validateTestingFile(incomplete))
@@ -65,7 +34,7 @@ test('throws if an experiment has no steps', t => {
 })
 
 test('throws if an experiment has steps with no variants', t => {
-  const incomplete = Object.assign({}, createValidTestingFile())
+  const incomplete = TestingFileBuilder.createValid()
   incomplete.experiments[0].steps[0].variants = []
 
   const error = t.throws(() => validator.validateTestingFile(incomplete))
@@ -80,27 +49,44 @@ test('throws if an experiment has steps with no variants', t => {
 })
 
 test('throws if steps must have a targeting', t => {
-  const incomplete = Object.assign({}, createValidTestingFile())
+  const tf = TestingFileBuilder.createValid()
 
   const rule = RuleBuilder.createUrlRule('foo.bar')
   const token = new TokenBuilder().withRule(rule.id).build()
 
-  incomplete.experiments[0].targeting = [token]
-  incomplete.rules.push(rule)
+  tf.experiments[0].targeting = [token]
+  tf.rules.push(rule)
 
-  const error = t.throws(() => validator.validateTestingFile(incomplete))
+  // Threre is only 1 Step. All good.
+  t.notThrows(() => validator.validateTestingFile(tf))
+
+  // With 2 Steps, step targetings become mandatory.
+  tf.experiments[0].steps.push(new StepBuilder().build())
+
+  const error = t.throws(() => validator.validateTestingFile(tf))
   t.is(
     error.message,
-    'Validation failed:\n- Experiment ' +
-      incomplete.experiments[0].id +
+    'Validation failed:\n' +
+      '- Experiment ' +
+      tf.experiments[0].id +
       '  | Step ' +
-      incomplete.experiments[0].steps[0].id +
+      tf.experiments[0].steps[0].id +
+      ' has no targeting\n' +
+      '- Experiment ' +
+      tf.experiments[0].id +
+      '  | Step ' +
+      tf.experiments[0].steps[1].id +
       ' has no targeting'
   )
+
+  // However, if the experiment targeting is removed, step targetings aren't required either.
+  tf.experiments[0].targeting = []
+
+  t.notThrows(() => validator.validateTestingFile(tf))
 })
 
 test('throws if rule(s) is missing', t => {
-  const incomplete = Object.assign({}, createValidTestingFile())
+  const incomplete = TestingFileBuilder.createValid()
 
   const t1 = new TokenBuilder().withRule(generateObjectId()).build()
   const t2 = new TokenBuilder().withRule(generateObjectId()).build()
