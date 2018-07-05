@@ -35,15 +35,15 @@ test('converts to dottedk key-value pairs', t => {
     'dates.first': new Date('Mon Oct 13 2014 00:00:00 GMT+0100 (BST)')
   }
 
-  t.deepEqual(dotize(obj), expected)
+  t.deepEqual(dotize.convert(obj), expected)
 })
 
 test('keeps empty arrays', t => {
-  t.deepEqual(dotize({ hello: [] }), { hello: [] })
-  t.deepEqual(dotize({ hello: { world: [] } }), { 'hello.world': [] })
+  t.deepEqual(dotize.convert({ hello: [] }), { hello: [] })
+  t.deepEqual(dotize.convert({ hello: { world: [] } }), { 'hello.world': [] })
 })
 
 test('keeps empty objects', t => {
-  t.deepEqual(dotize({ hello: {} }), { hello: {} })
-  t.deepEqual(dotize({ hello: { world: {} } }), { 'hello.world': {} })
+  t.deepEqual(dotize.convert({ hello: {} }), { hello: {} })
+  t.deepEqual(dotize.convert({ hello: { world: {} } }), { 'hello.world': {} })
 })

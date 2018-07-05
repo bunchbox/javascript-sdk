@@ -277,7 +277,7 @@ test('does not throw if specific url-/referrer-parameters are missing', t => {
 test('throws if the step targeting cannot match due to missing attributes', t => {
   const experiment = new ExperimentBuilder()
     .withTargetingRule(
-      RuleBuilder.createCustomAttributeRule('gender', 'female')
+      RuleBuilder.createCustomAttributeRule('attributes.gender', 'female')
     )
     .withSteps([new StepBuilder().build()])
     .build()

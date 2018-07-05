@@ -92,7 +92,7 @@ test('returns a single result via option { single: true }', t => {
   t.deepEqual(experiment, tf.experiments[0])
 })
 
-test('returns null if nothing was found (with { single: true })', t => {
+test('returns undefined if nothing was found (with { single: true })', t => {
   const tf = TestingFileBuilder.createValid()
   const store = new Store()
   store.setTestingFile(tf)
@@ -102,7 +102,7 @@ test('returns null if nothing was found (with { single: true })', t => {
     { single: true }
   )
 
-  t.is(experiment, null)
+  t.is(experiment, undefined)
 })
 
 // store.findRules/1 and store.findRules/2
@@ -120,13 +120,13 @@ test('finds a rule by its id', t => {
   t.deepEqual(rules, [tf.rules[0]])
 })
 
-test('returns an empty array / null if nothing was found', t => {
+test('returns an empty array / undefined if nothing was found', t => {
   const tf = TestingFileBuilder.createValid()
   const store = new Store()
   store.setTestingFile(tf)
 
   const rule = store.findRules({ ruleId: 'bar' }, { single: true })
-  t.deepEqual(rule, null)
+  t.deepEqual(rule, undefined)
 
   const rules = store.findRules({ ruleId: 'bar' })
   t.deepEqual(rules, [])

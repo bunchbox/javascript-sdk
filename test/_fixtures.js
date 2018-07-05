@@ -122,9 +122,8 @@ class RuleBuilder extends BaseBuilder {
 
   static createUrlParamRule(param, val) {
     const condition = new ConditionBuilder()
-      .withKey('urlParameters')
+      .withKey(`urlParameters.${param}`)
       .withComparator('equals')
-      .withParameter(param)
       .withValue(val)
       .build()
 
@@ -133,9 +132,8 @@ class RuleBuilder extends BaseBuilder {
 
   static createReferrerParamRule(param, val) {
     const condition = new ConditionBuilder()
-      .withKey('referrerParameters')
+      .withKey(`referrerParameters.${param}`)
       .withComparator('equals')
-      .withParameter(param)
       .withValue(val)
       .build()
 
@@ -168,8 +166,8 @@ class ConditionBuilder extends BaseBuilder {
 
     this.key = null
     this.comparator = null
-    this.parameter = null
     this.value = null
+    this.parameter = null
 
     super.init()
   }

@@ -18,8 +18,7 @@ test('evaluates all tokens', t => {
         match: 'all',
         conditions: [
           {
-            attribute: 'foo',
-            key: 'gender',
+            key: 'attributes.gender',
             comparator: 'equals',
             value: 'female'
           },
@@ -37,8 +36,7 @@ test('evaluates all tokens', t => {
         match: 'all',
         conditions: [
           {
-            attribute: 'foo',
-            key: 'gender',
+            key: 'attributes.gender',
             comparator: 'equals',
             value: 'female'
           },
@@ -73,8 +71,7 @@ test('should evaluate all conditions', t => {
     match: 'all',
     conditions: [
       {
-        attribute: 'foo',
-        key: 'gender',
+        key: 'attributes.gender',
         comparator: 'equals',
         value: 'female'
       },
@@ -96,8 +93,7 @@ test('succeeds if least one condition evaluates to true', t => {
     match: 'any',
     conditions: [
       {
-        attribute: 'foo',
-        key: 'gender',
+        key: 'attributes.gender',
         comparator: 'equals',
         value: 'female'
       },
@@ -112,14 +108,9 @@ test('fails if no condition evaluates to true', t => {
   const rule = {
     match: 'any',
     conditions: [
-      {
-        attribute: 'foo',
-        key: 'gender',
-        comparator: 'equals',
-        value: 'female'
-      },
-      { attribute: 'foo', key: 'gender', comparator: 'equals', value: 'male' },
-      { attribute: 'foo', key: 'gender', comparator: 'equals', value: 'unisex' }
+      { key: 'attributes.gender', comparator: 'equals', value: 'female' },
+      { key: 'attributes.gender', comparator: 'equals', value: 'male' },
+      { key: 'attributes.gender', comparator: 'equals', value: 'unisex' }
     ]
   }
 
@@ -208,28 +199,18 @@ test('evaluates device attributes', t => {
 
 test('evaluates parameter attributes', t => {
   const params = {
-    urlParameters: { foo: 'bar', bar: null },
+    urlParameters: { foo: 'bar', bar: 0 },
     referrerParameters: { bar: 'foo', foo: null }
   }
 
   const matching_conditions = [
-    {
-      key: 'urlParameters',
-      parameter: 'foo',
-      comparator: 'notRegex',
-      value: /barbar/
-    },
-    {
-      key: 'referrerParameters',
-      parameter: 'foo',
-      comparator: 'notRegex',
-      value: /barbar/
-    },
-    { key: 'referrerParameters', parameter: 'asdf', comparator: 'doesNotExist' }
+    { key: 'urlParameters.foo', comparator: 'notRegex', value: /barbar/ },
+    { key: 'referrerParameters.foo', comparator: 'notRegex', value: /barbar/ },
+    { key: 'referrerParameters.asdf', comparator: 'doesNotExist' }
   ]
 
   const failing_conditions = [
-    { key: 'urlParameters', parameter: 'bar', comparator: 'doesNotExist' }
+    { key: 'urlParameters.bar', comparator: 'doesNotExist' }
   ]
 
   for (let condition of matching_conditions) {
@@ -281,13 +262,13 @@ test('should evaluate custom attributes', t => {
   }
 
   const matching_conditions = [
-    { attribute: 1, key: 'truthy', comparator: 'isTrue' },
-    { attribute: 2, key: 'falsy', comparator: 'isFalse' },
-    { attribute: 3, key: 'list', comparator: 'listContains', value: 3 }
+    { key: 'attributes.truthy', comparator: 'isTrue' },
+    { key: 'attributes.falsy', comparator: 'isFalse' },
+    { key: 'attributes.list', comparator: 'listContains', value: 3 }
   ]
 
   const failing_conditions = [
-    { attribute: 3, key: 'list', comparator: 'listContains', value: 4 }
+    { key: 'attributes.list', comparator: 'listContains', value: 4 }
   ]
 
   for (let condition of matching_conditions) {
@@ -314,25 +295,14 @@ test('only works with arrays', t => {
   }
 
   const matching_conditions = [
+    { key: 'attributes.list', comparator: 'listSizeIsGreater', value: 3 },
     {
-      attribute: 'list',
-      key: 'list',
-      comparator: 'listSizeIsGreater',
-      value: 3
-    },
-    {
-      attribute: 'list',
-      key: 'list',
+      key: 'attributes.list',
       comparator: 'listSizeIsGreaterOrEqual',
       value: 4
     },
-    { attribute: 'list', key: 'list', comparator: 'listSizeIsLess', value: 6 },
-    {
-      attribute: 'list',
-      key: 'list',
-      comparator: 'listSizeIsLessOrEqual',
-      value: 4
-    }
+    { key: 'attributes.list', comparator: 'listSizeIsLess', value: 6 },
+    { key: 'attributes.list', comparator: 'listSizeIsLessOrEqual', value: 4 }
   ]
 
   const failing_conditions = [
@@ -408,8 +378,7 @@ test('fails for non-numeric values', t => {
     t[expected](
       evaluator.formula(
         f({
-          attribute: 'list',
-          key: 'list',
+          key: 'attributes.list',
           comparator: 'listSizeIsLess',
           value: value
         }),
@@ -429,8 +398,7 @@ test('succeeds if the list is greater', t => {
   t.true(
     evaluator.formula(
       f({
-        attribute: 'list',
-        key: 'list',
+        key: 'attributes.list',
         comparator: 'listSizeIsGreater',
         value: 0
       }),
@@ -449,8 +417,7 @@ test('succeeds the list is greater or equal', t => {
   t.true(
     evaluator.formula(
       f({
-        attribute: 'list',
-        key: 'list',
+        key: 'attributes.list',
         comparator: 'listSizeIsGreaterOrEqual',
         value: 1
       }),
@@ -469,8 +436,7 @@ test('succeeds if the list is less', t => {
   t.true(
     evaluator.formula(
       f({
-        attribute: 'list',
-        key: 'list',
+        key: 'attributes.list',
         comparator: 'listSizeIsLess',
         value: 2
       }),
@@ -489,8 +455,7 @@ test('succeeds if the list is less or equal', t => {
   t.true(
     evaluator.formula(
       f({
-        attribute: 'list',
-        key: 'list',
+        key: 'attributes.list',
         comparator: 'listSizeIsLessOrEqual',
         value: 1
       }),
