@@ -10,9 +10,9 @@ const PORT = 5999
 
 // In order to make each test unique, the test name (=title) is used as part of
 // the host.
-const baseUrl = ({ title }) => {
-  return `http://${title.replace(new RegExp(' ', 'g'), '_')}.localhost:${PORT}`
-}
+const host = ({ title }) =>
+  `${title.replace(new RegExp(' ', 'g'), '_')}.localhost:${PORT}`
+const proto = 'http'
 
 test.before(() => {
   testServer.start('https://api.bunchbox.co', PORT)
@@ -26,7 +26,8 @@ test.after(() => {
 
 test('fetches the testing file', async t => {
   const testingFile = await api.fetchTestingFile(process.env.TOKEN, {
-    baseUrl: baseUrl(t)
+    host: host(t),
+    proto
   })
 
   t.is(testingFile.account, '529dd741b822cc631f000002')
@@ -38,7 +39,7 @@ test('fetches the testing file', async t => {
 
 test('throws error if the token does not exist', async t => {
   const error = await t.throws(
-    () => api.fetchTestingFile('0000000', { baseUrl: baseUrl(t) }),
+    () => api.fetchTestingFile('0000000', { host: host(t), proto }),
     Error
   )
 
