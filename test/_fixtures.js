@@ -236,6 +236,10 @@ class TestingFileBuilder extends BaseBuilder {
   }
 
   static createValid() {
+    // CAVEAT:  Due to the normalization of condtions that happens before
+    // storing the testing file, targetings should be build manually. Don't use
+    // helpers like RuleBuilder.createUrlParamRule etc.
+
     // Experiment 1: Basic. No Targeting(s). 1 Step. 1 Goal
 
     const v1 = new VariantBuilder()

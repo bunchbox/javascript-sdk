@@ -82,7 +82,6 @@ test('hashes the userId to deterministically pick an manually weighted variant',
       stepId: '0',
       distributionKey: userId
     })
-
     t.is(variant.id, 3)
   }
 })
@@ -95,10 +94,10 @@ test('requires the distributionKey and stepId', t => {
   }
 
   const e1 = t.throws(() => bucketer.pickVariant(exp, { stepId: 1 }))
-  t.is(e1.message, 'distributionKey is required')
+  t.is(e1.message, 'opts.distributionKey is required')
 
   const e2 = t.throws(() => bucketer.pickVariant(exp, { distributionKey: 'k' }))
-  t.is(e2.message, 'stepId is required')
+  t.is(e2.message, 'opts.stepId is required')
 })
 
 // bucketer.isAllocated/2

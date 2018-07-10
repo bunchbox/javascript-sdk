@@ -2,6 +2,7 @@ require('rootpath')()
 
 const test = require('ava')
 
+const { Failure } = require('lib/util/error')
 const testing = require('lib/testing')
 
 const {
@@ -17,7 +18,10 @@ const {
 test('throws if no userId is passed', t => {
   const experiment = new ExperimentBuilder().build()
 
-  const error = t.throws(() => testing.assignUser(experiment, null, null))
+  const error = t.throws(
+    () => testing.assignUser(experiment, null, null),
+    Error
+  )
 
   t.is(error.message, 'distributionKey is required')
 })
@@ -44,9 +48,10 @@ test('throwsif the experiment targeting does not match', t => {
     .withUrlTargeting('https://example.com')
     .build()
 
-  const error = t.throws(() => {
-    testing.assignUser(experiment, 0, '$userId', { url: 'foobar.com' })
-  }, Error)
+  const error = t.throws(
+    () => testing.assignUser(experiment, 0, '$userId', { url: 'foobar.com' }),
+    Failure
+  )
 
   t.is(error.message, 'Experiment targeting did not match')
 })
@@ -151,10 +156,12 @@ test('throws if no step targeting matches', t => {
     ])
     .build()
 
-  const error = t.throws(() =>
-    testing.assignUser(experiment, null, '$userId', {
-      url: 'https://foobar.io'
-    })
+  const error = t.throws(
+    () =>
+      testing.assignUser(experiment, null, '$userId', {
+        url: 'https://foobar.io'
+      }),
+    Failure
   )
 
   t.is(error.message, 'Experiment step targeting did not match')
@@ -194,7 +201,10 @@ test('throws if no step exits at the given stepIndex', t => {
     .withSteps([new StepBuilder().build()])
     .build()
 
-  const error = t.throws(() => testing.assignUser(experiment, 2, '$userId'))
+  const error = t.throws(
+    () => testing.assignUser(experiment, 2, '$userId'),
+    Failure
+  )
 
   t.is(error.message, 'Step at index 2 does not exist')
 })
@@ -209,7 +219,10 @@ test('throws if the experiment targeting cannot match due to missing parameters'
     .withSteps([new StepBuilder().build()])
     .build()
 
-  const error = t.throws(() => testing.assignUser(experiment, null, '$userId'))
+  const error = t.throws(
+    () => testing.assignUser(experiment, null, '$userId'),
+    Failure
+  )
 
   t.is(
     error.message,
@@ -240,8 +253,10 @@ test('throws if the step targeting cannot match due to missing parameters', t =>
     ])
     .build()
 
-  const error = t.throws(() =>
-    testing.assignUser(experiment, null, '$userId', { url: 'example.com' })
+  const error = t.throws(
+    () =>
+      testing.assignUser(experiment, null, '$userId', { url: 'example.com' }),
+    Failure
   )
 
   t.is(
@@ -258,17 +273,26 @@ test('does not throw if specific url-/referrer-parameters are missing', t => {
     .withSteps([new StepBuilder().build()])
     .build()
 
-  const e1 = t.throws(() => testing.assignUser(experiment, null, '$userId'))
+  const e1 = t.throws(
+    () => testing.assignUser(experiment, null, '$userId'),
+    Failure
+  )
   t.is(
     e1.message,
     'Targeting cannot match because the following params are missing: urlParameters, referrerParameters'
   )
 
   const e2 = t.throws(() =>
-    testing.assignUser(experiment, null, '$userId', {
-      urlParameters: {},
-      referrerParameters: {}
-    })
+    testing.assignUser(
+      experiment,
+      null,
+      '$userId',
+      {
+        urlParameters: {},
+        referrerParameters: {}
+      },
+      Failure
+    )
   )
 
   t.is(e2.message, 'Experiment targeting did not match')
@@ -288,12 +312,33 @@ test('throws if the step targeting cannot match due to missing attributes', t =>
     { attributes: {} },
     { attributes: { other: 'foo' } }
   ]) {
-    const error = t.throws(() =>
-      testing.assignUser(experiment, null, '$userId', params)
+    const error = t.throws(
+      () => testing.assignUser(experiment, null, '$userId', params),
+      Failure
     )
     t.is(
       error.message,
       'Targeting cannot match because the following params are missing: attributes.gender'
     )
   }
+})
+
+test('throws if user does not get to participate in the experiment', t => {
+  const experiment = new ExperimentBuilder()
+    .withId('5b446b4db2e33529c316b52c')
+    .withTrafficAllocation(0.5)
+    .withSteps([new StepBuilder().build()])
+    .build()
+
+  // Is allowed to participate
+
+  t.notThrows(() => testing.assignUser(experiment, null, '!yes', {}))
+
+  // Is not allowed to participate
+
+  const error = t.throws(
+    () => testing.assignUser(experiment, null, '!no', {}),
+    Failure
+  )
+  t.is(error.message, 'User is excluded from participating in the experiment')
 })
