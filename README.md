@@ -10,7 +10,7 @@ The SDK currently supports all versions of Node from Node v7 onwards.
 
 ### Installing
 
-Add `@bunchbox/bunchbox-sdk` to your package.json:
+Add `bunchbox/javascript-sdk` to your package.json:
 
 ```bash
 npm i bunchbox/javascript-sdk
@@ -21,7 +21,8 @@ npm i bunchbox/javascript-sdk
 First, initialize the BunchboxSDK with your API token:
 
 ```js
-const bb = new BunchboxSdk('$yourApiToken')
+const BunchboxSdk = require('bunchbox-sdk')
+const bb = new BunchboxSdk($yourApiToken)
 ```
 
 To bucket a visitor into a variant activate the experiment
@@ -39,7 +40,11 @@ returned.
 To track events for conversion metrics:
 
 ```js
-await bb.track({ experimentId: '5b475fb051ceab0190f68719', goalIdentifier: 'bb:g01' })
+await bb.track({ 
+  userId: '43026325619819', 
+  experimentId: '5b475fb051ceab0190f68719', 
+  goalIdentifier: 'bb:g01'
+})
 ```
 
 ### User IDs
@@ -51,7 +56,7 @@ important to keep the user IDs unique among the population used for
 experiments. Well suited, for example, are first-party cookies, device IDs or
 universal user identifiers (UUID).
 
-**Note:** Please pay attention to anonymizing the user IDs since they are send
+**Note:** Please pay attention to anonymizing the user IDs since they are sent
 to the Bunchbox servers exactly as you provide them.
 
 ### Synchronization
@@ -63,8 +68,8 @@ may trigger a reload of the SDK periodically.
 
 #### Webhooks
 
-To create a Webhook navigate to `Account Settings > Webhooks` and add the URL
-our service should ping. Your supplied endpoint will receive a POST request
+To create a webhook, navigate to `Account Settings > Webhooks` and add the URL
+our service should ping. Your supplied endpoint will receive a `POST` request
 whenever necessary.
 
 A typical payload will look like this:
@@ -77,7 +82,7 @@ A typical payload will look like this:
 }
 ```
 
-After being notified by the Bunchbox servers your Endpoint should trigger a
+After being notified by the Bunchbox servers your endpoint should trigger a
 reload of the SDK:
 
 ```js
@@ -86,13 +91,13 @@ bb.reloadTestingFile() // Here, bb is an instance of BunchboxSdk
 
 #### Securing webhooks
 
-We strongly recommend to verify that requests send to your Endpoint originated
+We strongly recommend to verify that requests sent to your endpoint originated
 from the Bunchbox servers. For this reason Bunchbox generates a secret key
 which is used to create a signature of the webhook payload. That signature is
 included in the HTTP header `X-BB-Signature`.
 
 The secret key can only be obtained once after the creation of the webhook. To
-regenerate it, please recreate the whole webhook.
+regenerate it, you have to create a new webhook.
 
 To verify the signature of the `X-BB-Signature` header you need to create the
 HMAC-SHA256 hexdigest of the (stringified) payload. In Node.js the verification
@@ -107,7 +112,7 @@ const createSignature = (data, key) => {
   return hmac.digest('hex')
 }
 
-const digest = createSignature(JSON.stringify(thePayload), yourApiKey)
+const digest = createSignature(JSON.stringify(thePayload), $yourApiToken)
 
 const isValid = crypto.timingSafeEqual(signature, digest)
 ```
@@ -117,7 +122,7 @@ const isValid = crypto.timingSafeEqual(signature, digest)
 The `activate` and `track` calls both return a Promise which usually does not
 need to be `await`ed. However, it is still important to think about how to
 handle rejected Promises. Under normal circumstances those rejections should
-never occurs. If, however, network problems arise `track` / `activate`
+never occur. If, however, network problems arise, `track` / `activate`
 naturally cannot succeed. Hence, you should put `catch` in place to handle
 those situations as you like. One option would be to retry failed calls with
 exponential backoff.
