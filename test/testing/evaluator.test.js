@@ -558,3 +558,50 @@ test('succeeds if the hour is given as string', t => {
     )
   )
 })
+
+// simpleMatches, doesNotSimpleMatch
+
+test('succeeds if the simplified urls match', t => {
+  const params = {
+    url: 'https://www.example.com?bar=baz#foo'
+  }
+
+  const matching_conditions = [
+    {
+      key: 'url',
+      comparator: 'simpleMatches',
+      value: 'http://www.example.com?a=1'
+    },
+    {
+      key: 'url',
+      comparator: 'simpleMatches',
+      value: 'www.example.com'
+    },
+    {
+      key: 'url',
+      comparator: 'doesNotSimpleMatch',
+      value: 'www.example.com/other-page'
+    }
+  ]
+
+  const failing_conditions = [
+    {
+      key: 'url',
+      comparator: 'simpleMatches',
+      value: 'www.example.com/other-page'
+    },
+    {
+      key: 'url',
+      comparator: 'doesNotSimpleMatch',
+      value: 'www.example.com'
+    }
+  ]
+
+  for (let condition of matching_conditions) {
+    t.true(evaluator.formula(f(condition), params))
+  }
+
+  for (let condition of failing_conditions) {
+    t.false(evaluator.formula(f(condition), params))
+  }
+})

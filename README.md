@@ -6,7 +6,7 @@ The JavaScript SDK for [Bunchbox](https://bunchbox.co/).
 
 ### Prerequisites
 
-The SDK currently supports all versions of Node from Node v7 onwards.
+The SDK currently supports all versions of Node.js from v7 onwards.
 
 ### Installing
 
