@@ -1,7 +1,14 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
-  "required": ["account", "version", "revision", "experiments", "rules"],
+  "required": [
+    "account",
+    "version",
+    "revision",
+    "experiments",
+    "rules",
+    "segments"
+  ],
   "properties": {
     "account": { "$ref": "#/definitions/ObjectId" },
     "version": {
@@ -22,6 +29,12 @@
       "type": "array",
       "minItems": 0,
       "items": { "$ref": "#/definitions/rule" },
+      "uniqueItems": true
+    },
+    "segments": {
+      "type": "array",
+      "minItems": 0,
+      "items": { "$ref": "#/definitions/segment" },
       "uniqueItems": true
     }
   },
@@ -111,6 +124,25 @@
       "required": ["id", "match", "conditions"],
       "additionalProperties": false
     },
+    "segment": {
+      "type": "object",
+      "properties": {
+        "id": { "$ref": "#/definitions/ObjectId" },
+        "name": { "type": "string" },
+        "type": {
+          "type": "string",
+          "enum": ["default", "custom"]
+        },
+        "tokens": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/token" },
+          "minItems": 0,
+          "uniqueItems": false
+        }
+      },
+      "required": ["id", "name", "type", "tokens"],
+      "additionalProperties": false
+    },
     "condition": {
       "type": "object",
       "properties": {
@@ -140,7 +172,9 @@
             "listSizeIsGreater",
             "listSizeIsLess",
             "listSizeIsGreaterOrEqual",
-            "listSizeIsLessOrEqual"
+            "listSizeIsLessOrEqual",
+            "simpleMatches",
+            "doesNotSimpleMatch"
           ]
         },
         "value": {
@@ -211,12 +245,12 @@
     "token": {
       "type": "object",
       "properties": {
-        "type": {
-          "type": "integer",
-          "enum": [1, 2, 4, 8, 16]
-        },
-        "rule": { "$ref": "#/definitions/ObjectId" }
-      }
+        "rule": { "$ref": "#/definitions/ObjectId" },
+        "segment": { "$ref": "#/definitions/ObjectId" },
+        "type": { "type": "integer", "enum": [1, 2, 4, 8, 16, 32] }
+      },
+      "required": ["type"],
+      "additionalProperties": true
     }
   }
 }

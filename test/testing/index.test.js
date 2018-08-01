@@ -43,17 +43,16 @@ test('assigns a user if the experiment targeting matches', t => {
   t.is(variant.id, 'v0')
 })
 
-test('throwsif the experiment targeting does not match', t => {
+test('returns false if the experiment targeting does not match', t => {
   const experiment = new ExperimentBuilder()
     .withUrlTargeting('https://example.com')
     .build()
 
-  const error = t.throws(
-    () => testing.assignUser(experiment, 0, '$userId', { url: 'foobar.com' }),
-    Failure
-  )
+  const matches = testing.assignUser(experiment, 0, '$userId', {
+    url: 'foobar.com'
+  })
 
-  t.is(error.message, 'Experiment targeting did not match')
+  t.false(matches)
 })
 
 test('picks step with matching targeting if no stepIndex is given', t => {
@@ -139,7 +138,7 @@ test('Falls back to the first step if no stepIndex is given', t => {
   t.is(variant.id, 'v00')
 })
 
-test('throws if no step targeting matches', t => {
+test('returns false if no step targeting matches', t => {
   const experiment = new ExperimentBuilder()
     .withUrlTargeting('https://foobar.io')
     .withSteps([
@@ -156,15 +155,11 @@ test('throws if no step targeting matches', t => {
     ])
     .build()
 
-  const error = t.throws(
-    () =>
-      testing.assignUser(experiment, null, '$userId', {
-        url: 'https://foobar.io'
-      }),
-    Failure
-  )
+  const matches = testing.assignUser(experiment, null, '$userId', {
+    url: 'https://foobar.io'
+  })
 
-  t.is(error.message, 'Experiment step targeting did not match')
+  t.false(matches)
 })
 
 test('picks the first matching step if multiple step targetings match', t => {
@@ -282,20 +277,12 @@ test('does not throw if specific url-/referrer-parameters are missing', t => {
     'Targeting cannot match because the following params are missing: urlParameters, referrerParameters'
   )
 
-  const e2 = t.throws(() =>
-    testing.assignUser(
-      experiment,
-      null,
-      '$userId',
-      {
-        urlParameters: {},
-        referrerParameters: {}
-      },
-      Failure
-    )
-  )
+  const matches = testing.assignUser(experiment, null, '$userId', {
+    urlParameters: {},
+    referrerParameters: {}
+  })
 
-  t.is(e2.message, 'Experiment targeting did not match')
+  t.false(matches)
 })
 
 test('throws if the step targeting cannot match due to missing attributes', t => {

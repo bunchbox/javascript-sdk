@@ -231,6 +231,7 @@ class TestingFileBuilder extends BaseBuilder {
     this.revision = 1
     this.experiments = []
     this.rules = []
+    this.segments = []
 
     super.init()
   }

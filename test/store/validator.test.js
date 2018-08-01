@@ -117,6 +117,7 @@ test('throws if the testingFile has missing properties', t => {
       "- should have required property 'version'\n" +
       "- should have required property 'revision'\n" +
       "- should have required property 'experiments'\n" +
-      "- should have required property 'rules'"
+      "- should have required property 'rules'\n" +
+      "- should have required property 'segments'"
   )
 })
