@@ -1,8 +1,6 @@
-require('rootpath')()
-
 const test = require('ava')
 
-const bucketer = require('lib/testing/bucketer')
+const bucketer = require('../../lib/testing/bucketer')
 
 // bucketer.pickVariant/2
 

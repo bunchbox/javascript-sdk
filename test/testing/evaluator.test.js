@@ -1,8 +1,6 @@
-require('rootpath')()
-
 const test = require('ava')
 
-const evaluator = require('lib/testing/evaluator')
+const evaluator = require('../../lib/testing/evaluator')
 
 const f = condition => [
   { type: 1, rule: { match: 'any', conditions: [condition] } }

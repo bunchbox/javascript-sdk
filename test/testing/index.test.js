@@ -1,9 +1,7 @@
-require('rootpath')()
-
 const test = require('ava')
 
-const { Failure } = require('lib/util/error')
-const testing = require('lib/testing')
+const { Failure } = require('../../lib/util/error')
+const testing = require('../../lib/testing')
 
 const {
   ExperimentBuilder,
@@ -11,7 +9,7 @@ const {
   RuleBuilder,
   VariantBuilder,
   TokenBuilder
-} = require('test/_fixtures')
+} = require('../_fixtures')
 
 // testing.assignUser/4
 
@@ -319,13 +317,11 @@ test('throws if user does not get to participate in the experiment', t => {
 
   // Is allowed to participate
 
-  t.notThrows(() => testing.assignUser(experiment, null, '!yes', {}))
+  const variant = testing.assignUser(experiment, null, '!yes', {})
+  t.truthy(variant.id)
+  t.truthy(variant.name)
 
   // Is not allowed to participate
 
-  const error = t.throws(
-    () => testing.assignUser(experiment, null, '!no', {}),
-    Failure
-  )
-  t.is(error.message, 'User is excluded from participating in the experiment')
+  t.false(testing.assignUser(experiment, null, '!no', {}))
 })

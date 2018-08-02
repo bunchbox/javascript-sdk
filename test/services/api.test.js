@@ -1,10 +1,8 @@
-require('rootpath')()
-
 const test = require('ava')
 
-const api = require('lib/services/api')
+const api = require('../../lib/services/api')
 
-const testServer = require('test/_test_server')
+const testServer = require('../_test_server')
 
 const PORT = 5999
 

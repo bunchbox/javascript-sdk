@@ -1,8 +1,6 @@
-require('rootpath')()
-
 const test = require('ava')
 
-const murmurhash = require('lib/util/murmurhash')
+const murmurhash = require('../../lib/util/murmurhash')
 
 // murmurhash.hash/1
 

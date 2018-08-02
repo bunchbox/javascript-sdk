@@ -40,9 +40,9 @@ returned.
 To track events for conversion metrics:
 
 ```js
-await bb.track({ 
-  userId: '43026325619819', 
-  experimentId: '5b475fb051ceab0190f68719', 
+await bb.track({
+  userId: '43026325619819',
+  experimentId: '5b475fb051ceab0190f68719',
   goalIdentifier: 'bb:g01'
 })
 ```

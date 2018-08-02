@@ -1,8 +1,6 @@
-require('rootpath')()
-
 const test = require('ava')
 const { inspect } = require('util')
-const { isNumber, isBoolean, isObject } = require('lib/util/is-type')
+const { isNumber, isBoolean, isObject } = require('../../lib/util/is-type')
 
 // isBoolean/1
 

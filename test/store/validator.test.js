@@ -1,16 +1,14 @@
-require('rootpath')()
-
 const test = require('ava')
 
-const generateObjectId = require('lib/util/object-id')
-const validator = require('lib/store/validator')
+const generateObjectId = require('../../lib/util/object-id')
+const validator = require('../../lib/store/validator')
 
 const {
   RuleBuilder,
   TokenBuilder,
   TestingFileBuilder,
   StepBuilder
-} = require('test/_fixtures')
+} = require('../_fixtures')
 
 // validator.validateTestingFile/1
 

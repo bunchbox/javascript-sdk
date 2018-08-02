@@ -1,9 +1,7 @@
-require('rootpath')()
-
 const test = require('ava')
 
-const Store = require('lib/store')
-const { TestingFileBuilder } = require('test/_fixtures')
+const Store = require('../../lib/store')
+const { TestingFileBuilder } = require('../_fixtures')
 
 // store.setTestingFile/1
 

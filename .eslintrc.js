@@ -11,11 +11,6 @@ module.exports = {
     es6: true,
     node: true
   },
-  settings: {
-    node: {
-      resolvePaths: [__dirname, 'node_modules']
-    }
-  },
   rules: {
     'ava/use-t-well': 0,
     'no-console': process.env.NODE_ENV === 'production' ? 2 : 0,

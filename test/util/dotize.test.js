@@ -1,8 +1,6 @@
-require('rootpath')()
-
 const test = require('ava')
 
-const dotize = require('lib/util/dotize')
+const dotize = require('../../lib/util/dotize')
 
 test('converts to dottedk key-value pairs', t => {
   const obj = {

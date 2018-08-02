@@ -1,8 +1,6 @@
-require('rootpath')()
-
 const test = require('ava')
 
-const BunchboxSdk = require('lib')
+const BunchboxSdk = require('..//lib')
 
 // TODO: test more thoroughly, e.g. opts.host, opts.strict, BunchboxError etc
 

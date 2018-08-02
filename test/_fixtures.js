@@ -1,5 +1,5 @@
-const generateObjectId = require('lib/util/object-id')
-const { isCustomAttributeKey } = require('lib/testing')
+const generateObjectId = require('../lib/util/object-id')
+const { isCustomAttributeKey } = require('../lib/testing')
 
 class BaseBuilder {
   init() {

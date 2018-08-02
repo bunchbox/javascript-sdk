@@ -1,8 +1,6 @@
-require('rootpath')()
-
 const test = require('ava')
 
-const { simplifyUrl } = require('lib/testing/url')
+const { simplifyUrl } = require('../../lib/testing/url')
 
 // url.simplifyUrl/1
 

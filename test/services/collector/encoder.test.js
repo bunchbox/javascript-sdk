@@ -1,5 +1,3 @@
-require('rootpath')()
-
 const test = require('ava')
 
 const {
@@ -7,7 +5,7 @@ const {
   encodeEcommerceParams,
   encodeMainParams,
   encodeParams
-} = require('lib/services/collector/encoder')
+} = require('../../../lib/services/collector/encoder')
 
 // encoder.encodeAttributes/1
 
