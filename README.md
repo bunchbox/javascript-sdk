@@ -119,13 +119,12 @@ const isValid = crypto.timingSafeEqual(signature, digest)
 
 ## Error Handling
 
-The `activate` and `track` calls both return a Promise which usually does not
+The `activate` and `track` calls both return a Promise which basically does not
 need to be `await`ed. However, it is still important to think about how to
-handle rejected Promises. Under normal circumstances those rejections should
-never occur. If, however, network problems arise, `track` / `activate`
-naturally cannot succeed. Hence, you should put `catch` in place to handle
-those situations as you like. One option would be to retry failed calls with
-exponential backoff.
+handle potential Errors e.g. due to network problems / timeouts. The SDK uses a
+custom Error type `Failure` which marks non-critical or temporary errors. It is
+recommend to check for those kind of errors in a `catch` clause. Please have a
+look at the `examples/` for an exemplary implementation.
 
 ## Running the tests
 
