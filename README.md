@@ -124,7 +124,7 @@ need to be `await`ed. However, it is still important to think about how to
 handle potential Errors e.g. due to network problems / timeouts. The SDK uses a
 custom Error type `Failure` which marks non-critical or temporary errors. It is
 recommend to check for those kind of errors in a `catch` clause. Please have a
-look at the `examples/` for an exemplary implementation.
+look at the `example/` for an exemplary implementation.
 
 ## Running the tests
 

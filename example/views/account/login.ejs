@@ -1,0 +1,27 @@
+<% layout('layout') -%>
+
+
+<div class="custom-container" ng-controller="UserLoginCtrl">
+  <div class="page-header">
+    <h3>Sign in</h3>
+  </div>
+  <form novalidate method="POST" action="/login" name="loginForm">
+    <div class="row">
+      <div class="col-sm-7">
+        <div class="form-group">
+          <label for="email" class="control-label">Email</label>
+          <input type="email" name="email" id="email" placeholder="Email" autofocus class="form-control" required ng-model="login"/>
+        </div>
+        <div class="form-group">
+          <label for="password" class="control-label">Password</label>
+          <input type="password" name="password" id="password" placeholder="Password" class="form-control" required ng-model="psw"/>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary" ng-disabled="loginForm.$invalid">
+            <i class="fa fa-user"></i>Login
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
