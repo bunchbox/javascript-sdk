@@ -4,6 +4,7 @@ const compress = require('compression')
 const session = require('express-session')
 const pgSession = require('connect-pg-simple')(session)
 const bodyParser = require('body-parser')
+const getRawBody = require('raw-body')
 const logger = require('morgan')
 const errorHandler = require('errorhandler')
 const methodOverride = require('method-override')
@@ -46,8 +47,20 @@ app.use(
   })
 )
 app.use(logger('dev'))
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+
+// Required for the signature verification
+const rawBodySaver = function(req, res, buf, encoding) {
+  // Only needed on requests to the webhook route where the header is present
+  const header = req.get('x-bb-signature')
+
+  if (header && buf && buf.length) {
+    req.rawBody = buf.toString(encoding || 'utf8')
+  }
+}
+app.use(bodyParser.json({ verify: rawBodySaver }))
+app.use(bodyParser.urlencoded({ verify: rawBodySaver, extended: true }))
+app.use(bodyParser.raw({ verify: rawBodySaver }))
+
 app.use(expressValidator())
 app.use(methodOverride())
 app.use(cookieParser())
@@ -82,7 +95,10 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }))
  * Routes
  */
 const homeController = require('./controllers/home')(bb, secrets.bbExperimentId)
+const webhookController = require('./controllers/webhook')(bb)
 const userController = require('./controllers/user')
+
+const verifySignature = require('./middleware/verfiy-signature')
 
 app.get('/', homeController.index)
 app.get('/login', userController.getLogin)
@@ -90,6 +106,7 @@ app.post('/login', userController.postLogin)
 app.get('/logout', userController.logout)
 app.get('/signup', userController.getSignup)
 app.post('/signup', userController.postSignup)
+app.post('/webhooks', verifySignature, webhookController.receive)
 
 app.use(errorHandler())
 
