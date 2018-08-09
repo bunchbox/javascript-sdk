@@ -48,18 +48,28 @@ app.use(
 )
 app.use(logger('dev'))
 
-// Required for the signature verification
-const rawBodySaver = function(req, res, buf, encoding) {
-  // Only needed on requests to the webhook route where the header is present
-  const header = req.get('x-bb-signature')
+// Required for the signature verification.
+//
+// The raw body does only nedd to be added if the 'x-bb-signature' header is
+// present.
+//
+// All requests still need their bodies parsed as JSON.
+//
+// This is not a perfect example since the coupling with the webhook route is
+// too strict. But you get the idea :)
 
-  if (header && buf && buf.length) {
+const saveRawBody = function(req, res, buf, encoding) {
+  const header = req.get('x-bb-signature')
+  const path = req.originalUrl
+
+  if (header != null && path === '/webhooks' && buf && buf.length) {
     req.rawBody = buf.toString(encoding || 'utf8')
   }
 }
-app.use(bodyParser.json({ verify: rawBodySaver }))
-app.use(bodyParser.urlencoded({ verify: rawBodySaver, extended: true }))
-app.use(bodyParser.raw({ verify: rawBodySaver }))
+
+app.use(bodyParser.json({ verify: saveRawBody }))
+app.use(bodyParser.urlencoded({ verify: saveRawBody, extended: true }))
+app.use(bodyParser.raw({ verify: saveRawBody }))
 
 app.use(expressValidator())
 app.use(methodOverride())
@@ -82,10 +92,11 @@ app.use(
     }
   })
 )
+
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(flash())
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   res.locals.user = req.user
   next()
 })
