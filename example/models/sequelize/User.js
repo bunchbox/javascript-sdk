@@ -63,6 +63,10 @@ module.exports = (db, DataTypes) => {
     return user
   }
 
+  User.prototype.getBunchboxUserId = function() {
+    return `demo:home-exp:${this.getHashedEmail()}`
+  }
+
   User.prototype.getGravatarUrl = function(size = 200) {
     if (!this.email) {
       return 'https://gravatar.com/avatar/?s=' + size + '&d=retro'

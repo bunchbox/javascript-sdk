@@ -60,9 +60,13 @@ app.use(logger('dev'))
 
 const saveRawBody = function(req, res, buf, encoding) {
   const header = req.get('x-bb-signature')
-  const path = req.originalUrl
 
-  if (header != null && path === '/webhooks' && buf && buf.length) {
+  if (
+    header != null &&
+    req.originalUrl === '/api/webhook' &&
+    buf &&
+    buf.length
+  ) {
     req.rawBody = buf.toString(encoding || 'utf8')
   }
 }
@@ -100,13 +104,17 @@ app.use((req, res, next) => {
   res.locals.user = req.user
   next()
 })
+app.use(function(req, res, next) {
+  if (/api/i.test(req.path)) req.session.returnTo = req.path
+  next()
+})
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }))
 
 /**
  * Routes
  */
+const apiController = require('./controllers/api')(bb, secrets.bbExperimentId)
 const homeController = require('./controllers/home')(bb, secrets.bbExperimentId)
-const webhookController = require('./controllers/webhook')(bb)
 const userController = require('./controllers/user')
 
 const verifySignature = require('./middleware/verfiy-signature')
@@ -117,7 +125,11 @@ app.post('/login', userController.postLogin)
 app.get('/logout', userController.logout)
 app.get('/signup', userController.getSignup)
 app.post('/signup', userController.postSignup)
-app.post('/webhooks', verifySignature, webhookController.receive)
+
+// API
+
+app.post('/api/track', apiController.track)
+app.post('/api/webhook', verifySignature, apiController.webhook)
 
 app.use(errorHandler())
 

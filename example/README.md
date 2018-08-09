@@ -33,7 +33,7 @@ To keep the SDK in-sync with Bunchbox it needs to be notified after each change
 to active experiments.
 
 To create a webhook navigate to `Account Settings > Webhooks` and add the URL
-`http://localhost:8080/webhooks`.
+`http://localhost:8080/api/webhook`.
 
 Make sure to save the webhook secret since it can only be shown once.
 

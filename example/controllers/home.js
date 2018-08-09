@@ -6,7 +6,7 @@ module.exports = (bb, experimentId) => {
   return {
     async index(req, res) {
       if (req.user) {
-        const userId = `demo:home-exp:${req.user.getHashedEmail()}`
+        const userId = req.user.getBunchboxUserId()
 
         const params = {
           url: req.headers.host,
@@ -16,9 +16,6 @@ module.exports = (bb, experimentId) => {
             gravatar: req.user.getGravatarUrl()
           }
         }
-
-        // TODO:
-        // * call bb.track
 
         try {
           const varriant = await bb.activate({ userId, experimentId }, params)
