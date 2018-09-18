@@ -29,8 +29,8 @@ To bucket a visitor into a variant activate the experiment
 
 ```js
 const variantId = await bb.activate({
-  userId: '43026325619819',
-  experimentId: '5b475fb051ceab0190f68719'
+	clientId: '43026325619819',
+	experimentId: '5b475fb051ceab0190f68719'
 })
 ```
 
@@ -41,9 +41,9 @@ To track events for conversion metrics:
 
 ```js
 await bb.track({
-  userId: '43026325619819',
-  experimentId: '5b475fb051ceab0190f68719',
-  goalIdentifier: 'bb:g01'
+	clientId: '43026325619819',
+	experimentId: '5b475fb051ceab0190f68719',
+	goalIdentifier: 'bb:g01'
 })
 ```
 
@@ -51,7 +51,7 @@ await bb.track({
 
 The SDK requires you to provide custom user IDs for all calls to `activate` and
 `track` in order to uniquely identify the participants in your experiments.
-Generally speaking, any string you like may be used as `userId`. However, it is
+Generally speaking, any string you like may be used as `clientId`. However, it is
 important to keep the user IDs unique among the population used for
 experiments. Well suited, for example, are first-party cookies, device IDs or
 universal user identifiers (UUID).
@@ -76,9 +76,9 @@ A typical payload will look like this:
 
 ```json
 {
-  "accountId": "$yourAccountId",
-  "ts": 1531989556143,
-  "event": "update"
+	"accountId": "$yourAccountId",
+	"ts": 1531989556143,
+	"event": "update"
 }
 ```
 
@@ -107,9 +107,9 @@ can be done as follows:
 const crypto = require('crypto')
 
 const createSignature = (data, key) => {
-  const hmac = crypto.createHmac('sha256', key)
-  hmac.update(data)
-  return hmac.digest('hex')
+	const hmac = crypto.createHmac('sha256', key)
+	hmac.update(data)
+	return hmac.digest('hex')
 }
 
 const digest = createSignature(JSON.stringify(thePayload), $yourApiToken)

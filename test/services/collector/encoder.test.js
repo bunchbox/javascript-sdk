@@ -50,7 +50,7 @@ test('encodes main parameters', t => {
     type: 't',
     id: 'id',
     experimentId: 'tex',
-    userId: 'u',
+    clientId: 'cid',
     variantId: 'tva',
     conversionId: 'tco',
     goalId: 'tgo',
@@ -66,7 +66,7 @@ test('encodes main parameters', t => {
     tex: 'tex',
     tgo: 'tgo',
     tva: 'tva',
-    u: 'u'
+    cid: 'cid'
   })
 })
 

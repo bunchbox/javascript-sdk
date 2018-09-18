@@ -13,7 +13,7 @@ const {
 
 // testing.assignUser/4
 
-test('throws if no userId is passed', t => {
+test('throws if no clientId is passed', t => {
   const experiment = new ExperimentBuilder().build()
 
   const error = t.throws(
@@ -34,7 +34,7 @@ test('assigns a user if the experiment targeting matches', t => {
     ])
     .build()
 
-  const variant = testing.assignUser(experiment, 0, '$userId', {
+  const variant = testing.assignUser(experiment, 0, '$clientId', {
     url: 'https://example.com'
   })
 
@@ -46,7 +46,7 @@ test('returns false if the experiment targeting does not match', t => {
     .withUrlTargeting('https://example.com')
     .build()
 
-  const matches = testing.assignUser(experiment, 0, '$userId', {
+  const matches = testing.assignUser(experiment, 0, '$clientId', {
     url: 'foobar.com'
   })
 
@@ -70,7 +70,7 @@ test('picks step with matching targeting if no stepIndex is given', t => {
     ])
     .build()
 
-  const variant = testing.assignUser(experiment, null, '$userId', {
+  const variant = testing.assignUser(experiment, null, '$clientId', {
     url: 'https://example.com'
   })
 
@@ -91,7 +91,7 @@ test('picks step accordingly to the given stepIndex even though the step targeti
     ])
     .build()
 
-  const variant = testing.assignUser(experiment, 1, '$userId', {
+  const variant = testing.assignUser(experiment, 1, '$clientId', {
     url: 'https://example.com'
   })
 
@@ -112,7 +112,7 @@ test('Allows multiple steps w/o targetings if a stepIndex is given', t => {
     ])
     .build()
 
-  const variant = testing.assignUser(experiment, 1, '$userId')
+  const variant = testing.assignUser(experiment, 1, '$clientId')
 
   t.is(variant.id, 'v10')
 })
@@ -131,7 +131,7 @@ test('Falls back to the first step if no stepIndex is given', t => {
     ])
     .build()
 
-  const variant = testing.assignUser(experiment, null, '$userId')
+  const variant = testing.assignUser(experiment, null, '$clientId')
 
   t.is(variant.id, 'v00')
 })
@@ -153,7 +153,7 @@ test('returns false if no step targeting matches', t => {
     ])
     .build()
 
-  const matches = testing.assignUser(experiment, null, '$userId', {
+  const matches = testing.assignUser(experiment, null, '$clientId', {
     url: 'https://foobar.io'
   })
 
@@ -182,7 +182,7 @@ test('picks the first matching step if multiple step targetings match', t => {
     ])
     .build()
 
-  const variant = testing.assignUser(experiment, null, '$userId', {
+  const variant = testing.assignUser(experiment, null, '$clientId', {
     url: 'https://match.com'
   })
 
@@ -195,7 +195,7 @@ test('throws if no step exits at the given stepIndex', t => {
     .build()
 
   const error = t.throws(
-    () => testing.assignUser(experiment, 2, '$userId'),
+    () => testing.assignUser(experiment, 2, '$clientId'),
     Failure
   )
 
@@ -213,7 +213,7 @@ test('throws if the experiment targeting cannot match due to missing parameters'
     .build()
 
   const error = t.throws(
-    () => testing.assignUser(experiment, null, '$userId'),
+    () => testing.assignUser(experiment, null, '$clientId'),
     Failure
   )
 
@@ -248,7 +248,7 @@ test('throws if the step targeting cannot match due to missing parameters', t =>
 
   const error = t.throws(
     () =>
-      testing.assignUser(experiment, null, '$userId', { url: 'example.com' }),
+      testing.assignUser(experiment, null, '$clientId', { url: 'example.com' }),
     Failure
   )
 
@@ -267,7 +267,7 @@ test('does not throw if specific url-/referrer-parameters are missing', t => {
     .build()
 
   const e1 = t.throws(
-    () => testing.assignUser(experiment, null, '$userId'),
+    () => testing.assignUser(experiment, null, '$clientId'),
     Failure
   )
   t.is(
@@ -275,7 +275,7 @@ test('does not throw if specific url-/referrer-parameters are missing', t => {
     'Targeting cannot match because the following params are missing: urlParameters, referrerParameters'
   )
 
-  const matches = testing.assignUser(experiment, null, '$userId', {
+  const matches = testing.assignUser(experiment, null, '$clientId', {
     urlParameters: {},
     referrerParameters: {}
   })
@@ -298,7 +298,7 @@ test('throws if the step targeting cannot match due to missing attributes', t =>
     { attributes: { other: 'foo' } }
   ]) {
     const error = t.throws(
-      () => testing.assignUser(experiment, null, '$userId', params),
+      () => testing.assignUser(experiment, null, '$clientId', params),
       Failure
     )
     t.is(

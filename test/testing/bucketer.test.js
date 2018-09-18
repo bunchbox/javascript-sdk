@@ -18,7 +18,7 @@ test('chooses the only available variant', t => {
   t.is(variant.id, 99)
 })
 
-test('hashes the userId to deterministically pick variant', t => {
+test('hashes the clientId to deterministically pick variant', t => {
   const experiment = {
     id: 1,
     hasCustomVariantDistribution: false,
@@ -43,7 +43,7 @@ test('picks always the same variant for a step', t => {
     ]
   }
 
-  const distributionKey = '$userId'
+  const distributionKey = '$clientId'
 
   const v1 = bucketer.pickVariant(experiment, {
     stepId: '0',
@@ -59,7 +59,7 @@ test('picks always the same variant for a step', t => {
   t.is(v2.id, '11')
 })
 
-test('hashes the userId to deterministically pick an manually weighted variant', t => {
+test('hashes the clientId to deterministically pick an manually weighted variant', t => {
   const experiment = {
     id: 1,
     hasCustomVariantDistribution: true,
@@ -75,10 +75,10 @@ test('hashes the userId to deterministically pick an manually weighted variant',
     ]
   }
 
-  for (let userId of ['$userId', 'foo', 'bar', '123']) {
+  for (let clientId of ['$clientId', 'foo', 'bar', '123']) {
     const variant = bucketer.pickVariant(experiment, {
       stepId: '0',
-      distributionKey: userId
+      distributionKey: clientId
     })
     t.is(variant.id, 3)
   }
@@ -103,7 +103,7 @@ test('requires the distributionKey and stepId', t => {
 test('always allocates a user to an experiment if the trafficAllocation is 1.0', t => {
   const isAllocated = bucketer.isAllocated(
     { id: 'eId', trafficAllocation: 1.0 },
-    `userId:${Math.random()}`
+    `clientId:${Math.random()}`
   )
 
   t.true(isAllocated)
@@ -112,7 +112,7 @@ test('always allocates a user to an experiment if the trafficAllocation is 1.0',
 test('never allocates a user to an experiment if the trafficAllocation is 0', t => {
   const isAllocated = bucketer.isAllocated(
     { id: 'eId', trafficAllocation: 0.0 },
-    `userId:${Math.random()}`
+    `clientId:${Math.random()}`
   )
 
   t.false(isAllocated)

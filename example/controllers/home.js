@@ -6,7 +6,7 @@ module.exports = (bb, experimentId) => {
   return {
     async index(req, res) {
       if (req.user) {
-        const userId = req.user.getBunchboxUserId()
+        const clientId = req.user.getBunchboxClientId()
 
         const params = {
           url: req.headers.host,
@@ -18,7 +18,7 @@ module.exports = (bb, experimentId) => {
         }
 
         try {
-          const varriant = await bb.activate({ userId, experimentId }, params)
+          const varriant = await bb.activate({ clientId, experimentId }, params)
 
           if (varriant) {
             req.flash('success', {

@@ -30,7 +30,7 @@ test('constructor: validates its input parameters', t => {
 test('activate: validates its input parameters', t => {
   const sdk = new BunchboxSdk('token')
 
-  const userId = '...'
+  const clientId = '...'
   const experimentId = '...'
 
   let error
@@ -39,21 +39,21 @@ test('activate: validates its input parameters', t => {
   t.is(error.message, 'first argument must be an object')
 
   error = t.throws(() => sdk.activate({ experimentId }))
-  t.is(error.message, 'userId must be a string')
+  t.is(error.message, 'clientId must be a string')
 
-  error = t.throws(() => sdk.activate({ userId }))
+  error = t.throws(() => sdk.activate({ clientId }))
   t.is(error.message, 'experimentId must be a string')
 
   t.notThrows(() => {
-    sdk.activate({ userId, experimentId })
+    sdk.activate({ clientId, experimentId })
   })
 
   error = t.throws(() =>
-    sdk.activate({ userId, experimentId, stepIndex: 'notANubmer' })
+    sdk.activate({ clientId, experimentId, stepIndex: 'notANubmer' })
   )
   t.is(error.message, 'stepIndex must be a number')
 
-  error = t.throws(() => sdk.activate({ userId, experimentId }, null))
+  error = t.throws(() => sdk.activate({ clientId, experimentId }, null))
   t.is(error.message, 'params must be an object')
 })
 
@@ -62,7 +62,7 @@ test('activate: validates its input parameters', t => {
 test('track: validates its input parameters', t => {
   const sdk = new BunchboxSdk('token')
 
-  const userId = '...'
+  const clientId = '...'
   const experimentId = '...'
 
   let error
@@ -71,18 +71,18 @@ test('track: validates its input parameters', t => {
   t.is(error.message, 'first argument must be an object')
 
   error = t.throws(() => sdk.track({}))
-  t.is(error.message, 'userId must be a string')
+  t.is(error.message, 'clientId must be a string')
 
-  error = t.throws(() => sdk.track({ userId, experimentId: 111 }))
+  error = t.throws(() => sdk.track({ clientId, experimentId: 111 }))
   t.is(error.message, 'experimentId must be a string')
 
   t.notThrows(() => {
-    sdk.track({ userId })
+    sdk.track({ clientId })
   })
   t.notThrows(() => {
-    sdk.track({ userId, experimentId })
+    sdk.track({ clientId, experimentId })
   })
 
-  error = t.throws(() => sdk.track({ userId }, null))
+  error = t.throws(() => sdk.track({ clientId }, null))
   t.is(error.message, 'params must be an object')
 })

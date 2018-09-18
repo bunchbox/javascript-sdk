@@ -63,7 +63,7 @@ module.exports = (db, DataTypes) => {
     return user
   }
 
-  User.prototype.getBunchboxUserId = function() {
+  User.prototype.getBunchboxClientId = function() {
     return `demo:home-exp:${this.getHashedEmail()}`
   }
 

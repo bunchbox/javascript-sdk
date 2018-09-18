@@ -5,7 +5,7 @@ module.exports = (bb, experimentId) => {
         // Send conversion event for all goals of the given experiment
 
         bb.track({
-          userId: req.user.getBunchboxUserId(),
+          clientId: req.user.getBunchboxClientId(),
           experimentId
           // To track a specific goal:
           // goalIdentifier: '!yourGoalIdentifier'

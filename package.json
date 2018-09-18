@@ -28,19 +28,19 @@
     "package.json"
   ],
   "dependencies": {
-    "ajv": "^6.5.2",
+    "ajv": "^6.5.3",
     "axios": "^0.18.0",
     "immutable": "^3.8.2"
   },
   "devDependencies": {
     "ava": "1.0.0-beta.5.1",
-    "documentation": "^8.0.2",
-    "eslint": "^5.2.0",
-    "eslint-config-prettier": "^2.9.0",
-    "eslint-plugin-ava": "^5.0.0",
+    "documentation": "^8.1.2",
+    "eslint": "^5.6.0",
+    "eslint-config-prettier": "^3.0.1",
+    "eslint-plugin-ava": "^5.1.1",
     "eslint-plugin-node": "^7.0.1",
     "eslint-plugin-prettier": "^2.6.2",
-    "prettier": "1.14.0",
+    "prettier": "1.14.2",
     "yakbak": "^3.0.0"
   }
 }
