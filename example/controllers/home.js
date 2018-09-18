@@ -9,7 +9,7 @@ module.exports = (bb, experimentId) => {
         const clientId = req.user.getBunchboxClientId()
 
         const params = {
-          url: req.headers.host,
+          url: req.protocol + '://' + req.get('host') + req.originalUrl,
           userAgent: req.headers['user-agent'],
           urlParameters: req.query,
           attributes: {
