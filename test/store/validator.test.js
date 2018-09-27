@@ -27,7 +27,7 @@ test('throws if an experiment has no steps', t => {
     error.message,
     'Validation failed:\n- Experiment@' +
       incomplete.experiments[0].id +
-      ': steps should NOT have less than 1 items'
+      ': steps should NOT have fewer than 1 items'
   )
 })
 
@@ -42,7 +42,7 @@ test('throws if an experiment has steps with no variants', t => {
       incomplete.experiments[0].id +
       ' | Step@' +
       incomplete.experiments[0].steps[0].id +
-      ': variants should NOT have less than 1 items'
+      ': variants should NOT have fewer than 1 items'
   )
 })
 

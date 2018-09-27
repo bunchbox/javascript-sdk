@@ -10,7 +10,7 @@
     "start": "./node_modules/.bin/nodemon node app.js"
   },
   "dependencies": {
-    "bcrypt": "3.0.0",
+    "bcrypt": "3.0.1",
     "body-parser": "^1.18.3",
     "bunchbox-sdk": "file:..",
     "compression": "^1.7.3",
@@ -31,8 +31,8 @@
     "passport-local": "^1.0.0",
     "pg": "^7.4.3",
     "pg-hstore": "^2.3.2",
-    "sequelize": "^4.38.1",
-    "validator": "^10.7.1"
+    "sequelize": "^4.39.0",
+    "validator": "^10.8.0"
   },
   "devDependencies": {
     "nodemon": "^1.18.4"
