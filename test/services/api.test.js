@@ -36,7 +36,7 @@ test('fetches the testing file', async t => {
 })
 
 test('throws error if the token does not exist', async t => {
-  const error = await t.throws(
+  const error = await t.throwsAsync(
     () => api.fetchTestingFile('0000000', { host: host(t), proto }),
     Error
   )

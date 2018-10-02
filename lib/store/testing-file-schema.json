@@ -247,7 +247,7 @@
       "properties": {
         "rule": { "$ref": "#/definitions/ObjectId" },
         "segment": { "$ref": "#/definitions/ObjectId" },
-        "type": { "type": "integer", "enum": [1, 2, 4, 8, 16, 32] }
+        "type": { "type": "integer", "enum": [1, 2, 4, 8, 16, 32, 64] }
       },
       "required": ["type"],
       "additionalProperties": true
