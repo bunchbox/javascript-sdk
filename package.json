@@ -6,7 +6,8 @@
   "scripts": {
     "test": "ava",
     "lint": "eslint --fix --ext .js lib",
-    "docs": "documentation serve --watch lib/index.js -f md"
+    "docs": "documentation serve --watch lib/index.js -f md",
+    "build-docs": "documentation build lib/index.js -f html -o docs"
   },
   "repository": {
     "type": "git",
