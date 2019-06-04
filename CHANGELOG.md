@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [1.0.1] - 2019-03-19
+
+- Fix dependencies and typos
+
 ## [1.0.0] - 2019-03-19
 
 [unreleased]: https://github.com/bunchbox/javascript-sdk/compare/v1.0.0...HEAD

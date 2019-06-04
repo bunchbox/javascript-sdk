@@ -8,7 +8,7 @@ passport.serializeUser(function(user, done) {
 })
 
 passport.deserializeUser(function(id, done) {
-  db.User.findById(id)
+  db.User.findByPk(id)
     .then(function(user) {
       done(null, user)
     })

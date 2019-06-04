@@ -27,7 +27,7 @@ module.exports.postLogin = function(req, res, next) {
     if (!user || err) {
       try {
         err = JSON.stringify(err)
-      } catch (e) {}
+      } catch (e) {} // eslint-disable-line
 
       req.flash('errors', { msg: err || info.message })
       return res.redirect('/login')
