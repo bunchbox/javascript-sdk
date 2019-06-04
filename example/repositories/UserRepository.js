@@ -5,7 +5,7 @@ const ONE_HOUR = 3600000
 
 module.exports = {
   getUserById(id) {
-    return db.User.findById(id)
+    return db.User.findByPk(id)
   },
 
   async createUser(user) {

@@ -18,11 +18,11 @@ module.exports = (bb, experimentId) => {
         }
 
         try {
-          const varriant = await bb.activate({ clientId, experimentId }, params)
+          const variant = await bb.activate({ clientId, experimentId }, params)
 
-          if (varriant) {
+          if (variant) {
             req.flash('success', {
-              msg: `You were bucketed into varriant: ${varriant.name}`
+              msg: `You were bucketed into variant: ${variant.name}`
             })
           } else {
             req.flash('errors', [
