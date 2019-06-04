@@ -1,6 +1,6 @@
 {
   "name": "bunchbox-sdk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The JavaScript SDK for Bunchbox.",
   "main": "lib/index.js",
   "scripts": {
