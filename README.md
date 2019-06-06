@@ -1,6 +1,10 @@
 # Bunchbox SDK
 
-The JavaScript SDK for [Bunchbox](https://bunchbox.co/).
+This repositories contains the [Bunchbox](https://bunchbox.co/) SDK for NodeJS. The SDK provides a slim interface to run experiments of type `server-side`. To do so, Bunchbox provides a JSON file that contains all important data to run experiments on the backend side. In order to receive updates, you can provide a web hook URL within our app. As soon as the experiment was updated, Bunchbox notifies you using this webhook. Please see [Synchronization](#synchronization) for further details. Compared to other experiment types, the content of a variant is not defined within the app but needs to be implemented directly within your backend. Bunchbox will only let you know, which variant the current user was bucketed into.
+
+The SDK will - simply said - take care of evaluating optional targeting conditions, bucketing users  into variants based on hashed user IDs and tracking experiment participations and conversions.
+
+Server-Side testing can be implemented by various languages. This SDK serves as an example how to implement Server-Side testing in any other language.
 
 ## Getting Started
 
