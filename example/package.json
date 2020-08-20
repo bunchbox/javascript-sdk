@@ -10,7 +10,7 @@
     "start": "./node_modules/.bin/nodemon node app.js"
   },
   "dependencies": {
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.18.3",
     "bunchbox-sdk": "file:..",
     "compression": "^1.7.4",
