@@ -29,7 +29,7 @@
     "package.json"
   ],
   "dependencies": {
-    "ajv": "^6.10.0",
+    "ajv": "^6.12.3",
     "axios": "^0.18.1",
     "immutable": "^3.8.2"
   },
